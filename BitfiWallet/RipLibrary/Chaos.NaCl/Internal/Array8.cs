@@ -2,9 +2,9 @@
 
 namespace Chaos.NaCl.Internal
 {
-    // Array8\\ Poly1305 key
-    // Array8\\ SHA-512 state/output
-    internal struct Array8\\
+    // Array8<UInt32> Poly1305 key
+    // Array8<UInt64> SHA-512 state/output
+    internal struct Array8<T>
     {
         public T x0;
         public T x1;

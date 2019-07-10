@@ -2,7 +2,7 @@
 
 namespace NeoGasLibrary.NeoRpc
 {
-  public class NeoRpcResponse\\
+  public class NeoRpcResponse<T>
   {
     [JsonProperty("method")]
     public string Method { get; set; }

@@ -13,9 +13,9 @@ namespace NoxKeys
     {
         public static bool Validator(object sender, X509Certificate cert, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
-                if (cert == null || !cert.Subject.StartsWith("CN=www.bitfi.com")) return false;
-                if (sslPolicyErrors == System.Net.Security.SslPolicyErrors.None) return true;
-                return false;
+            if (cert == null || !cert.Subject.StartsWith("CN=www.bitfi.com")) return false;
+            if (sslPolicyErrors == System.Net.Security.SslPolicyErrors.None) return true;
+            return false;
         }
         public NWS()
         {
@@ -26,11 +26,11 @@ namespace NoxKeys
         internal static string SignMsg(string msg)
         {
             try
-            {             
-                return Sclear.noxPrivateKey.PrivateKey.SignMessage(msg);              
+            {
+                return Sclear.noxPrivateKey.PrivateKey.SignMessage(msg);
             }
             catch
-            {              
+            {
                 return null;
             }
         }
@@ -74,7 +74,8 @@ namespace NoxKeys
             {
                 byte[] buff = hmacsha256.ComputeHash(messageBytes);
                 string sbinary = "";
-                for (int i = 0; i \                {
+                for (int i = 0; i < buff.Length; i++)
+                {
                     sbinary += buff[i].ToString("X2");
                 }
                 return (sbinary);
@@ -114,7 +115,7 @@ namespace NoxKeys
                     msg = SHashSHA1(msg);
                     string signature = SignMsg(msg);
                     string MessageToken = walletServ.GetSGAToken(signature, msg, Sclear.pubkey, Sclear.PREFUSER, userPubKey, Signature);
-                    //  if (!string.IsNullOrEmpty(MessageToken) && MessageToken.Length \>\ 10) SGAMSGTOKEN = MessageToken;
+                    //  if (!string.IsNullOrEmpty(MessageToken) && MessageToken.Length > 10) SGAMSGTOKEN = MessageToken;
                     return MessageToken;
                 }
                 catch (WebException)

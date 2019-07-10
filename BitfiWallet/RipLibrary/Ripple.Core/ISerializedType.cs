@@ -23,7 +23,7 @@ namespace Ripple.Core
         {
             BytesList list = new BytesList();
             st.ToBytes(list);
-            return list.RawList().Aggregate("", (a, b) =\>\ a + ',' + B16.Encode(b));
+            return list.RawList().Aggregate("", (a, b) => a + ',' + B16.Encode(b));
         }
     }
 }

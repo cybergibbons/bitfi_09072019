@@ -11,7 +11,7 @@ namespace Chaos.NaCl
         public static readonly int PrivateKeySeedSizeInBytes = 32;
         public static readonly int SharedKeySizeInBytes = 32;
 
-        public static bool Verify(ArraySegment\\ signature, ArraySegment\\ message, ArraySegment\\ publicKey)
+        public static bool Verify(ArraySegment<byte> signature, ArraySegment<byte> message, ArraySegment<byte> publicKey)
         {
             if (signature.Count != SignatureSizeInBytes)
                 throw new ArgumentException(string.Format("Signature size must be {0}", SignatureSizeInBytes), "signature.Count");
@@ -35,7 +35,7 @@ namespace Chaos.NaCl
             return Ed25519Operations.crypto_sign_verify(signature, 0, message, 0, message.Length, publicKey, 0);
         }
 
-        public static void Sign(ArraySegment\\ signature, ArraySegment\\ message, ArraySegment\\ expandedPrivateKey)
+        public static void Sign(ArraySegment<byte> signature, ArraySegment<byte> message, ArraySegment<byte> expandedPrivateKey)
         {
             if (signature.Array == null)
                 throw new ArgumentNullException("signature.Array");
@@ -53,7 +53,7 @@ namespace Chaos.NaCl
         public static byte[] Sign(byte[] message, byte[] expandedPrivateKey)
         {
             var signature = new byte[SignatureSizeInBytes];
-            Sign(new ArraySegment\\(signature), new ArraySegment\\(message), new ArraySegment\\(expandedPrivateKey));
+            Sign(new ArraySegment<byte>(signature), new ArraySegment<byte>(message), new ArraySegment<byte>(expandedPrivateKey));
             return signature;
         }
 
@@ -88,7 +88,7 @@ namespace Chaos.NaCl
             expandedPrivateKey = sk;
         }
 
-        public static void KeyPairFromSeed(ArraySegment\\ publicKey, ArraySegment\\ expandedPrivateKey, ArraySegment\\ privateKeySeed)
+        public static void KeyPairFromSeed(ArraySegment<byte> publicKey, ArraySegment<byte> expandedPrivateKey, ArraySegment<byte> privateKeySeed)
         {
             if (publicKey.Array == null)
                 throw new ArgumentNullException("publicKey.Array");
@@ -112,12 +112,12 @@ namespace Chaos.NaCl
         public static byte[] KeyExchange(byte[] publicKey, byte[] privateKey)
         {
             var sharedKey = new byte[SharedKeySizeInBytes];
-            KeyExchange(new ArraySegment\\(sharedKey), new ArraySegment\\(publicKey), new ArraySegment\\(privateKey));
+            KeyExchange(new ArraySegment<byte>(sharedKey), new ArraySegment<byte>(publicKey), new ArraySegment<byte>(privateKey));
             return sharedKey;
         }
 
         [Obsolete("Needs more testing")]
-        public static void KeyExchange(ArraySegment\\ sharedKey, ArraySegment\\ publicKey, ArraySegment\\ privateKey)
+        public static void KeyExchange(ArraySegment<byte> sharedKey, ArraySegment<byte> publicKey, ArraySegment<byte> privateKey)
         {
             if (sharedKey.Array == null)
                 throw new ArgumentNullException("sharedKey.Array");

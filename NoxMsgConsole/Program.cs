@@ -27,14 +27,14 @@ namespace NoxMsgConsole
             byte[] msg = FileToBytes(message);
             using (var sha = new SHA256Managed())
             {
-              var sig = key.Sign(sha.ComputeHash(msg));
-              var der = sig.ToDER();
-              Console.WriteLine(der.ToHex());
+                var sig = key.Sign(sha.ComputeHash(msg));
+                var der = sig.ToDER();
+                Console.WriteLine(der.ToHex());
             }
             Console.ReadLine();
         }
 
-       static void Main(string[] args)
+        static void Main(string[] args)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace NoxMsgConsole
                 Console.WriteLine("Enter Task/TxnType: (//0 MSG//1 ARTICLE//2 DOWNLOAD//3 STATUS UPDATE)"); Console.WriteLine();
                 string type = Console.ReadLine(); Console.WriteLine();
                 int stype = Convert.ToInt32(type);
-                if (stype \\ 3) return;
+                if (stype < 0 || stype > 3) return;
                 string message = "";
                 var uri = "https://bitfi.dev/NoxMessages/API/PostMsg.aspx?TxnType=";
                 uri = uri + stype.ToString();
@@ -139,9 +139,9 @@ namespace NoxMsgConsole
                             string[] decode = ReadMsgTxn(rawtxn);
                             linked = decode[0];
                         }
-                            var resp = WebTests.POST(uri, rawtxn);
-                            success = resp.success;
-                            Console.WriteLine("Success: " + resp.success);
+                        var resp = WebTests.POST(uri, rawtxn);
+                        success = resp.success;
+                        Console.WriteLine("Success: " + resp.success);
                         if (!success)
                         {
                             Console.WriteLine(resp.error_message);
@@ -162,12 +162,12 @@ namespace NoxMsgConsole
                     byte[] signaturebts = SignMsg(EncodedMsg, key.GetPrivateKeyAsBytes(), key.GetPubKey());
                     string Signature = Convert.ToBase64String(signaturebts);
                     string rawtxn = BuildMsgTxn(ripemd.ToHex(), msgbts.ToHex(), Signature, linked);
-                        var resp = WebTests.POST(uri, rawtxn); 
-                        Console.WriteLine("Success: " + resp.success);
-                        Console.WriteLine(resp.error_message);
+                    var resp = WebTests.POST(uri, rawtxn);
+                    Console.WriteLine("Success: " + resp.success);
+                    Console.WriteLine(resp.error_message);
                     Console.WriteLine();
                     Console.WriteLine("Any key to exit...");
-                        Console.ReadLine();
+                    Console.ReadLine();
                 }
 
             }
@@ -242,7 +242,8 @@ namespace NoxMsgConsole
             var sig = _key.Sign(hash);
             var recId = -1;
             var thisKey = PubKey;
-            for (var i = 0; i \            {
+            for (var i = 0; i < 4; i++)
+            {
                 var rec = ECKey.RecoverFromSignature(i, sig, hash, false);
                 if (rec != null)
                 {
@@ -287,5 +288,3 @@ namespace NoxMsgConsole
         }
     }
 }
-
-

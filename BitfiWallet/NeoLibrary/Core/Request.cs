@@ -5,50 +5,49 @@ using System.IO;
 using System.Text;
 namespace NeoGasLibrary.Cryptography
 {
-  public enum RequestType
-  {
-    GET,
-    POST
-  }
-  public static class RequestUtils
-  {
-    /*private static string ExecuteRequest(WebRequest webReq)
+    public enum RequestType
     {
-        try
+        GET,
+        POST
+    }
+    public static class RequestUtils
+    {
+        /*private static string ExecuteRequest(WebRequest webReq)
         {
-            using (WebResponse response = webReq.GetResponse())
+            try
             {
-                using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+                using (WebResponse response = webReq.GetResponse())
                 {
-                    return sr.ReadToEnd();
+                    using (StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
+                    {
+                        return sr.ReadToEnd();
+                    }
                 }
             }
-        }
-        catch (WebException wex)
-        {
-            using (HttpWebResponse response = (HttpWebResponse)wex.Response)
+            catch (WebException wex)
             {
-                Stream str = response.GetResponseStream();
-                if (str == null)
-                    throw;
-                using (StreamReader sr = new StreamReader(str))
+                using (HttpWebResponse response = (HttpWebResponse)wex.Response)
                 {
-                    if (response.StatusCode != HttpStatusCode.InternalServerError)
+                    Stream str = response.GetResponseStream();
+                    if (str == null)
                         throw;
-                    return sr.ReadToEnd();
+                    using (StreamReader sr = new StreamReader(str))
+                    {
+                        if (response.StatusCode != HttpStatusCode.InternalServerError)
+                            throw;
+                        return sr.ReadToEnd();
+                    }
                 }
             }
+        }*/
+        public static string GetWebRequest(string url)
+        {
+            return null;
         }
-    }*/
-    public static string GetWebRequest(string url)
-    {
+        // var r = PostWebRequest("http://seed2.antshares.org:10332", "{'jsonrpc': '2.0', 'method': 'getblockcount', 'params': [],  'id': 1}");
+        public static string PostWebRequest(string url, string paramData)
+        {
             return null;
+        }
     }
-    // var r = PostWebRequest("http://seed2.antshares.org:10332", "{'jsonrpc': '2.0', 'method': 'getblockcount', 'params': [],  'id': 1}");
-    public static string PostWebRequest(string url, string paramData)
-    {
-            return null;
-    }
-  }
 }
-

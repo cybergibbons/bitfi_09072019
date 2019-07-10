@@ -8,9 +8,9 @@ namespace Ripple.Core.Binary
     {
         protected internal int Size;
         protected internal int Cursor;
-        public bool End() =\>\ Cursor \>\= Size;
-        public int Pos() =\>\ Cursor;
-        public int ReadOneInt() =\>\ ReadOne() & 0xFF;
+        public bool End() => Cursor >= Size;
+        public int Pos() => Cursor;
+        public int ReadOneInt() => ReadOne() & 0xFF;
 
         public abstract void Skip(int n);
         public abstract byte ReadOne();
@@ -34,7 +34,7 @@ namespace Ripple.Core.Binary
         {
             var tagByte = ReadOne();
 
-            var typeBits = (tagByte & 0xFF) \>\\>\ 4;
+            var typeBits = (tagByte & 0xFF) >> 4;
             if (typeBits == 0)
             {
                 typeBits = ReadOne();
@@ -46,8 +46,42 @@ namespace Ripple.Core.Binary
                 fieldBits = ReadOne();
             }
 
-            return typeBits \\= Size ||
-                   (customEnd != null && Cursor \>\= customEnd);
+            return typeBits << 16 | fieldBits;
+        }
+
+        public int ReadVlLength()
+        {
+            var b1 = ReadOneInt();
+            int result;
+
+            if (b1 <= 192)
+            {
+                result = b1;
+            }
+            else if (b1 <= 240)
+            {
+                var b2 = ReadOneInt();
+                result = 193 + (b1 - 193) * 256 + b2;
+            }
+            else if (b1 <= 254)
+            {
+                var b2 = ReadOneInt();
+                var b3 = ReadOneInt();
+                result = 12481 + (b1 - 241) * 65536 + b2 * 256 + b3;
+            }
+            else
+            {
+                throw new InvalidOperationException(
+                    "Invalid variable length indicator");
+            }
+
+            return result;
+        }
+
+        public bool End(int? customEnd)
+        {
+            return Cursor >= Size ||
+                   (customEnd != null && Cursor >= customEnd);
         }
     }
 }

@@ -6,8 +6,8 @@ using Ripple.Core.Binary;
 
 namespace Ripple.Core.Enums
 {
-    public abstract class SerializedEnumeration\\ : Enumeration\\ 
-        where TEnum : SerializedEnumItem\\
+    public abstract class SerializedEnumeration<TEnum, TOrd> : Enumeration<TEnum> 
+        where TEnum : SerializedEnumItem<TOrd>
         where TOrd : struct, IConvertible
     {
         protected SerializedEnumeration()
@@ -30,7 +30,7 @@ namespace Ripple.Core.Enums
 
         public int ReadOrdinal(BinaryParser parser)
         {
-            return parser.Read(Width).Aggregate(0, (a, b) =\>\ (a \>\\>\ 8) + b);
+            return parser.Read(Width).Aggregate(0, (a, b) => (a >> 8) + b);
         }
     }
 }

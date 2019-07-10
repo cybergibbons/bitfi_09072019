@@ -12,11 +12,11 @@ using Android.Graphics;
 using Android.Views;
 namespace BitfiWallet
 {
-   [Activity(Name = "my.SecretActivity", Label = "", Theme = "@style/FullscreenTheme", HardwareAccelerated = true, ExcludeFromRecents = true)]
+    [Activity(Name = "my.SecretActivity", Label = "", Theme = "@style/FullscreenTheme", HardwareAccelerated = true, ExcludeFromRecents = true)]
 
     public class SecretActivity : Activity
     {
-        private List\\ buttonLIst;
+        private List<Button> buttonLIst;
         private bool capson;
         private bool SaltSelected;
         private bool SecrSelected;
@@ -73,15 +73,15 @@ namespace BitfiWallet
             actiontask = Intent.GetStringExtra("task");
             AlertDialog.Builder builder = new AlertDialog.Builder(this, Resource.Style.MyAlertDialogTheme).SetTitle("Processing request, please wait...").SetMessage("").SetCancelable(false);
             bwalert = builder.Create();
-            tbsalt = FindViewById\\(Resource.Id.pos1);
-            tbsecr = FindViewById\\(Resource.Id.pos2);
+            tbsalt = FindViewById<LinearLayout>(Resource.Id.pos1);
+            tbsecr = FindViewById<LinearLayout>(Resource.Id.pos2);
             knoxsalt = new int[0];
             knoxsecr = new int[0];
             LoadBEvents();
             LoadEEvent();
             if (action == "sign")
             {
-                Task t = Task.Factory.StartNew(() =\>\
+                Task t = Task.Factory.StartNew(() =>
                 {
                     try
                     {
@@ -134,9 +134,10 @@ namespace BitfiWallet
             box.RemoveAllViews();
             int cnt = 0;
             int gg = inputs.Length - 1;
-            for (int i = gg; i \>\= 0; i--)
+            for (int i = gg; i >= 0; i--)
             {
-                if (cnt \                {
+                if (cnt < 30)
+                {
                     ImageView imageView = new ImageView(ApplicationContext);
                     imageView.SetImageBitmap(Sclear.SCharImage(inputs[i]).BITMAP);
                     box.AddView(imageView, 0);
@@ -182,7 +183,8 @@ namespace BitfiWallet
                             e.Result = new string[2] { "1", "" };
                             return;
                         }
-                        if (tkmsg.Length \                        {
+                        if (tkmsg.Length < 10)
+                        {
                             e.Result = new string[2] { "2", "" };
                             return;
                         }
@@ -208,7 +210,7 @@ namespace BitfiWallet
         private void vbw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             string[] result = e.Result as string[];
-            if (result[0].Length \>\ 10)
+            if (result[0].Length > 10)
             {
                 var nxact = new Intent(Application.Context, typeof(NoxViewModel));
 
@@ -228,7 +230,7 @@ namespace BitfiWallet
                 tbsecr.RemoveAllViews();
                 knoxsalt = new int[0];
                 knoxsecr = new int[0];
-                LinearLayout ltmain = FindViewById\\(Resource.Id.pos0);
+                LinearLayout ltmain = FindViewById<LinearLayout>(Resource.Id.pos0);
                 ltmain.Visibility = Android.Views.ViewStates.Visible;
                 if (result[0] == "0")
                 {
@@ -260,7 +262,7 @@ namespace BitfiWallet
 
                 if (action == "signin")
                 {
-                    sdMsg = "|\>\ DMA-2 LOGIN";
+                    sdMsg = "|> DMA-2 LOGIN";
                     sdmsg2 = "authenticating...";
                 }
                 vbw.RunWorkerAsync();
@@ -270,7 +272,7 @@ namespace BitfiWallet
                 builder.SetMessage(sdmsg2);
                 bwalert = builder.Create();
                 bwalert.Show();
-                LinearLayout ltmain = FindViewById\\(Resource.Id.pos0);
+                LinearLayout ltmain = FindViewById<LinearLayout>(Resource.Id.pos0);
                 ltmain.Visibility = Android.Views.ViewStates.Invisible;
             }
             if (action == "address")
@@ -283,11 +285,11 @@ namespace BitfiWallet
                 if (tproc == null)
                 {
                     AlertDialog.Builder tbuilder = new AlertDialog.Builder(this).SetTitle("Sign").SetMessage("Sorry, error getting request.").SetCancelable(false)
-                   .SetPositiveButton("Ok", (EventHandler\\)null);
+                   .SetPositiveButton("Ok", (EventHandler<DialogClickEventArgs>)null);
                     AlertDialog talert = tbuilder.Create();
                     talert.Show();
                     var okBtn = talert.GetButton((int)DialogButtonType.Positive);
-                    okBtn.Click += (asender, args) =\>\
+                    okBtn.Click += (asender, args) =>
                     {
                         NoxFinish();
                     };
@@ -316,7 +318,7 @@ namespace BitfiWallet
         }
         private void ProcessMsgTask()
         {
-            Task t = Task.Factory.StartNew(() =\>\
+            Task t = Task.Factory.StartNew(() =>
             {
                 string resp = "";
                 try
@@ -348,7 +350,7 @@ namespace BitfiWallet
                 }
                 finally
                 {
-                    this.RunOnUiThread(() =\>\
+                    this.RunOnUiThread(() =>
                     {
                         bwalert.Dismiss();
                         Sclear.EraseIntegers(knoxsalt);
@@ -370,34 +372,34 @@ namespace BitfiWallet
             tbsecr.RemoveAllViews();
             knoxsalt = new int[0];
             knoxsecr = new int[0];
-              AlertDialog.Builder tbuilder = new AlertDialog.Builder(this).SetTitle("Exit").SetMessage("Close wallet now?").SetCancelable(false).SetNegativeButton("NO", (EventHandler\\)null).SetPositiveButton("YES", (EventHandler\\)null);
-               AlertDialog talert = tbuilder.Create();
-              talert.Show();
-              LinearLayout ltmain = FindViewById\\(Resource.Id.pos0);
-              ltmain.Visibility = Android.Views.ViewStates.Invisible;
+            AlertDialog.Builder tbuilder = new AlertDialog.Builder(this).SetTitle("Exit").SetMessage("Close wallet now?").SetCancelable(false).SetNegativeButton("NO", (EventHandler<DialogClickEventArgs>)null).SetPositiveButton("YES", (EventHandler<DialogClickEventArgs>)null);
+            AlertDialog talert = tbuilder.Create();
+            talert.Show();
+            LinearLayout ltmain = FindViewById<LinearLayout>(Resource.Id.pos0);
+            ltmain.Visibility = Android.Views.ViewStates.Invisible;
             var okBtn = talert.GetButton((int)DialogButtonType.Positive);
-            okBtn.Click += (asender, args) =\>\
+            okBtn.Click += (asender, args) =>
              {
-              talert.Dismiss();
-                 ReleaseBW();
-            GC.Collect(0);
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-                 Finish();
-            base.OnBackPressed();
-             };
-             var noBtn = talert.GetButton((int)DialogButtonType.Negative);
-             noBtn.Click += (asender, args) =\>\
+                talert.Dismiss();
+                ReleaseBW();
+                GC.Collect(0);
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                Finish();
+                base.OnBackPressed();
+            };
+            var noBtn = talert.GetButton((int)DialogButtonType.Negative);
+            noBtn.Click += (asender, args) =>
              {
                 talert.Dismiss();
                 Sclear.EraseIntegers(knoxsalt);
                 Sclear.EraseIntegers(knoxsecr);
                 tbsalt.RemoveAllViews();
                 tbsecr.RemoveAllViews();
-               knoxsalt = new int[0];
-               knoxsecr = new int[0];
+                knoxsalt = new int[0];
+                knoxsecr = new int[0];
                 ltmain.Visibility = Android.Views.ViewStates.Visible;
-             };
+            };
         }
         private void NoxFinish()
         {
@@ -457,17 +459,17 @@ namespace BitfiWallet
                 tbsalt.RemoveAllViews();
                 tbsecr.RemoveAllViews();
                 knoxsalt = new int[0];
-                knoxsecr = new int[0];  
+                knoxsecr = new int[0];
             }
             catch
             {
             }
             ReleaseBW();
-             GC.Collect(0);
-             GC.Collect();
-             GC.WaitForPendingFinalizers();
+            GC.Collect(0);
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
 
-             Finish();
+            Finish();
 
         }
         private void TryExpMsg()
@@ -476,11 +478,11 @@ namespace BitfiWallet
             AlertDialog.Builder abuilder = new AlertDialog.Builder(this).SetTitle("")
 .SetMessage("It is possible that one or more experimental security checks have failed, please inform with dev/messages. Thanks!")
 .SetCancelable(false)
-.SetPositiveButton("ok", (EventHandler\\)null);
+.SetPositiveButton("ok", (EventHandler<DialogClickEventArgs>)null);
             AlertDialog aalert = abuilder.Create();
             aalert.Show();
             var okBtn = aalert.GetButton((int)DialogButtonType.Positive);
-            okBtn.Click += (asender, args) =\>\
+            okBtn.Click += (asender, args) =>
             {
                 aalert.Dismiss();
             };
@@ -676,22 +678,22 @@ namespace BitfiWallet
                             msg = signTransferResponse.FeeWarning + " Continue anyway to send " + signTransferResponse.Amount + " to " + signTransferResponse.ToAddress + " with fee " + signTransferResponse.TotalFee + " ?";
                         }
                     }
-                    AlertDialog.Builder tbuilder = new AlertDialog.Builder(this).SetTitle("|\>\ " + signTransferResponse.BlkDisplayName.ToUpper() + " Payment").SetMessage(msg).SetCancelable(false)
-                    .SetNegativeButton("NO", (EventHandler\\)null).SetPositiveButton("Yes, Continue", (EventHandler\\)null);
+                    AlertDialog.Builder tbuilder = new AlertDialog.Builder(this).SetTitle("|> " + signTransferResponse.BlkDisplayName.ToUpper() + " Payment").SetMessage(msg).SetCancelable(false)
+                    .SetNegativeButton("NO", (EventHandler<DialogClickEventArgs>)null).SetPositiveButton("Yes, Continue", (EventHandler<DialogClickEventArgs>)null);
                     AlertDialog talert = tbuilder.Create();
                     talert.Show();
                     var okBtn = talert.GetButton((int)DialogButtonType.Positive);
-                    okBtn.Click += (asender, args) =\>\
+                    okBtn.Click += (asender, args) =>
                     {
                         SendResponse = signTransferResponse;
                         talert.Dismiss();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("|\>\ " + signTransferResponse.BlkDisplayName.ToUpper() + " Payment").SetMessage("Ok, sending now...").SetCancelable(false);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("|> " + signTransferResponse.BlkDisplayName.ToUpper() + " Payment").SetMessage("Ok, sending now...").SetCancelable(false);
                         bwalert = builder.Create();
                         bwalert.Show();
                         tbw.RunWorkerAsync();
                     };
                     var NOTokBtn = talert.GetButton((int)DialogButtonType.Negative);
-                    NOTokBtn.Click += (asender, args) =\>\
+                    NOTokBtn.Click += (asender, args) =>
                     {
                         signTransferResponse = null;
                         SendResponse = null;
@@ -880,7 +882,7 @@ namespace BitfiWallet
             }
             if (result == 1001)
             {
-                DisplayMSG("FIRST ADDRESS ALERT \>\ Now repeat the passphrase and salt exactly as you have just entered, it's very important that you remember both since this is your first address.");
+                DisplayMSG("FIRST ADDRESS ALERT > Now repeat the passphrase and salt exactly as you have just entered, it's very important that you remember both since this is your first address.");
                 return;
             }
             if (result == 8)
@@ -926,11 +928,11 @@ namespace BitfiWallet
         }
         public void DisplayMSGInfo(string msg)
         {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("").SetMessage(msg).SetCancelable(false).SetPositiveButton("Ok", (EventHandler\\)null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("").SetMessage(msg).SetCancelable(false).SetPositiveButton("Ok", (EventHandler<DialogClickEventArgs>)null);
             AlertDialog alert = builder.Create();
             alert.Show();
             var okBtn = alert.GetButton((int)DialogButtonType.Positive);
-            okBtn.Click += (asender, args) =\>\
+            okBtn.Click += (asender, args) =>
             {
                 alert.Dismiss();
             };
@@ -940,11 +942,11 @@ namespace BitfiWallet
             string imsg = msg;
             if (msg == "0") msg = "Success!";
             if (string.IsNullOrEmpty(msg)) msg = "Connect Error";
-            AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("Request").SetMessage(msg).SetCancelable(false).SetPositiveButton("Ok", (EventHandler\\)null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("Request").SetMessage(msg).SetCancelable(false).SetPositiveButton("Ok", (EventHandler<DialogClickEventArgs>)null);
             AlertDialog alert = builder.Create();
             alert.Show();
             var okBtn = alert.GetButton((int)DialogButtonType.Positive);
-            okBtn.Click += (asender, args) =\>\
+            okBtn.Click += (asender, args) =>
             {
                 alert.Dismiss();
                 if (msg == "Success!")
@@ -958,11 +960,11 @@ namespace BitfiWallet
             string imsg = msg;
             if (msg == "0") msg = "Success!";
             if (string.IsNullOrEmpty(msg)) msg = "Connect Error";
-            AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("Request").SetMessage(msg).SetCancelable(false).SetPositiveButton("Ok", (EventHandler\\)null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("Request").SetMessage(msg).SetCancelable(false).SetPositiveButton("Ok", (EventHandler<DialogClickEventArgs>)null);
             AlertDialog alert = builder.Create();
             alert.Show();
             var okBtn = alert.GetButton((int)DialogButtonType.Positive);
-            okBtn.Click += (asender, args) =\>\
+            okBtn.Click += (asender, args) =>
             {
                 alert.Dismiss();
                 NoxFinish();
@@ -970,11 +972,11 @@ namespace BitfiWallet
         }
         public void DisplayMSGSuccess(string msg)
         {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("Request").SetMessage(msg).SetCancelable(false).SetPositiveButton("Ok", (EventHandler\\)null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("Request").SetMessage(msg).SetCancelable(false).SetPositiveButton("Ok", (EventHandler<DialogClickEventArgs>)null);
             AlertDialog alert = builder.Create();
             alert.Show();
             var okBtn = alert.GetButton((int)DialogButtonType.Positive);
-            okBtn.Click += (asender, args) =\>\
+            okBtn.Click += (asender, args) =>
             {
                 alert.Dismiss();
                 NoxFinish();
@@ -982,11 +984,11 @@ namespace BitfiWallet
         }
         public void DisplayMSGQuest(string msg)
         {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("Request").SetMessage(msg).SetCancelable(false).SetNegativeButton("NO", (EventHandler\\)null).SetPositiveButton("Yes, Continue", (EventHandler\\)null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("Request").SetMessage(msg).SetCancelable(false).SetNegativeButton("NO", (EventHandler<DialogClickEventArgs>)null).SetPositiveButton("Yes, Continue", (EventHandler<DialogClickEventArgs>)null);
             AlertDialog alert = builder.Create();
             alert.Show();
             var okBtn = alert.GetButton((int)DialogButtonType.Positive);
-            okBtn.Click += (asender, args) =\>\
+            okBtn.Click += (asender, args) =>
             {
                 alert.Dismiss();
             };
@@ -994,7 +996,8 @@ namespace BitfiWallet
         private void NXArray_Add(int addval, int[] nxlist, out int[] updated)
         {
             updated = new int[nxlist.Length + 1];
-            for (int i = 0; i \            {
+            for (int i = 0; i < nxlist.Length; i++)
+            {
                 updated[i] = nxlist[i];
                 nxlist[i] = -1;
             }
@@ -1004,12 +1007,14 @@ namespace BitfiWallet
         }
         private void NXArray_Remove(int[] nxlist, out int[] updated)
         {
-            if (nxlist.Length \            {
+            if (nxlist.Length < 1)
+            {
                 updated = nxlist;
                 return;
             }
             updated = new int[nxlist.Length - 1];
-            for (int i = 0; i \            {
+            for (int i = 0; i < nxlist.Length - 1; i++)
+            {
                 updated[i] = nxlist[i];
                 nxlist[i] = -1;
             }
@@ -1019,10 +1024,10 @@ namespace BitfiWallet
         }
         public void LoadEEvent()
         {
-            LinearLayout toptbsalt = FindViewById\\(Resource.Id.ttag1);
-            LinearLayout toptbsecr = FindViewById\\(Resource.Id.ttag2);
-            TextView tagsalt = FindViewById\\(Resource.Id.tag1);
-            TextView tagsecr = FindViewById\\(Resource.Id.tag2);
+            LinearLayout toptbsalt = FindViewById<LinearLayout>(Resource.Id.ttag1);
+            LinearLayout toptbsecr = FindViewById<LinearLayout>(Resource.Id.ttag2);
+            TextView tagsalt = FindViewById<TextView>(Resource.Id.tag1);
+            TextView tagsecr = FindViewById<TextView>(Resource.Id.tag2);
             SaltSelected = true;
             toptbsalt.SetBackgroundResource(Resource.Color.space);
             tagsalt.SetBackgroundResource(Resource.Color.space);
@@ -1044,7 +1049,8 @@ namespace BitfiWallet
                 }
                 else
                 {
-                    if (knoxsecr.Length \                    {
+                    if (knoxsecr.Length < 30)
+                    {
                         DisplayMSG("Secret. At least 30 characters required.");
                         SaltSelected = false;
                         SecrSelected = true;
@@ -1054,7 +1060,8 @@ namespace BitfiWallet
                         tagsalt.SetBackgroundResource(Resource.Color.black);
                         return;
                     }
-                    if (knoxsalt.Length \                    {
+                    if (knoxsalt.Length < 6)
+                    {
                         DisplayMSG("Salt. At least 6 characters required.");
                         SecrSelected = false;
                         SaltSelected = true;
@@ -1112,7 +1119,7 @@ namespace BitfiWallet
         }
         public void Vibe()
         {
-            Task t = Task.Factory.StartNew(() =\>\
+            Task t = Task.Factory.StartNew(() =>
             {
                 try
                 {
@@ -1128,7 +1135,7 @@ namespace BitfiWallet
         }
         private void LoadBEvents()
         {
-            buttonLIst = new List\\();
+            buttonLIst = new List<Button>();
             Button mButton1; Button mButton2; Button mButton3; Button mButton4; Button mButton5; Button mButton6; Button mButton7; Button mButton8; Button mButton9; Button mButton0; Button mButtonA; Button mButtonB; Button mButtonC; Button mButtonD; Button mButtonE; Button mButtonF; Button mButtonG; Button mButtonH; Button mButtonI; Button mButtonJ; Button mButtonK; Button mButtonL; Button mButtonM; Button mButtonN; Button mButtonO; Button mButtonP; Button mButtonQ; Button mButtonR; Button mButtonS; Button mButtonT; Button mButtonU; Button mButtonV; Button mButtonW; Button mButtonX; Button mButtonY; Button mButtonZ; Button mButtonDelete; Button mButtonSpace; Button mButtonShift; Button mButtonCaps;
             mButton1 = (Button)FindViewById(Resource.Id.button_1); mButton2 = (Button)FindViewById(Resource.Id.button_2); mButton3 = (Button)FindViewById(Resource.Id.button_3); mButton4 = (Button)FindViewById(Resource.Id.button_4); mButton5 = (Button)FindViewById(Resource.Id.button_5); mButton6 = (Button)FindViewById(Resource.Id.button_6); mButton7 = (Button)FindViewById(Resource.Id.button_7); mButton8 = (Button)FindViewById(Resource.Id.button_8); mButton9 = (Button)FindViewById(Resource.Id.button_9); mButton0 = (Button)FindViewById(Resource.Id.button_0); mButtonA = (Button)FindViewById(Resource.Id.button_A); mButtonB = (Button)FindViewById(Resource.Id.button_B); mButtonC = (Button)FindViewById(Resource.Id.button_C); mButtonD = (Button)FindViewById(Resource.Id.button_D); mButtonE = (Button)FindViewById(Resource.Id.button_E); mButtonF = (Button)FindViewById(Resource.Id.button_F); mButtonG = (Button)FindViewById(Resource.Id.button_G); mButtonH = (Button)FindViewById(Resource.Id.button_H); mButtonI = (Button)FindViewById(Resource.Id.button_I); mButtonJ = (Button)FindViewById(Resource.Id.button_J); mButtonK = (Button)FindViewById(Resource.Id.button_K); mButtonL = (Button)FindViewById(Resource.Id.button_L); mButtonM = (Button)FindViewById(Resource.Id.button_M); mButtonN = (Button)FindViewById(Resource.Id.button_N); mButtonO = (Button)FindViewById(Resource.Id.button_O); mButtonP = (Button)FindViewById(Resource.Id.button_P); mButtonQ = (Button)FindViewById(Resource.Id.button_Q); mButtonR = (Button)FindViewById(Resource.Id.button_R); mButtonS = (Button)FindViewById(Resource.Id.button_S); mButtonT = (Button)FindViewById(Resource.Id.button_T); mButtonU = (Button)FindViewById(Resource.Id.button_U); mButtonV = (Button)FindViewById(Resource.Id.button_V); mButtonW = (Button)FindViewById(Resource.Id.button_W); mButtonX = (Button)FindViewById(Resource.Id.button_X); mButtonY = (Button)FindViewById(Resource.Id.button_Y); mButtonZ = (Button)FindViewById(Resource.Id.button_Z);
             buttonLIst.Add(mButton0); buttonLIst.Add(mButton1); buttonLIst.Add(mButton2); buttonLIst.Add(mButton3); buttonLIst.Add(mButton4); buttonLIst.Add(mButton5); buttonLIst.Add(mButton6); buttonLIst.Add(mButton7); buttonLIst.Add(mButton8); buttonLIst.Add(mButton9); buttonLIst.Add(mButtonA); buttonLIst.Add(mButtonB); buttonLIst.Add(mButtonC); buttonLIst.Add(mButtonD); buttonLIst.Add(mButtonE); buttonLIst.Add(mButtonF); buttonLIst.Add(mButtonG); buttonLIst.Add(mButtonH); buttonLIst.Add(mButtonI); buttonLIst.Add(mButtonJ); buttonLIst.Add(mButtonK); buttonLIst.Add(mButtonL); buttonLIst.Add(mButtonM); buttonLIst.Add(mButtonN); buttonLIst.Add(mButtonO); buttonLIst.Add(mButtonP); buttonLIst.Add(mButtonQ); buttonLIst.Add(mButtonR); buttonLIst.Add(mButtonS); buttonLIst.Add(mButtonT); buttonLIst.Add(mButtonU); buttonLIst.Add(mButtonV); buttonLIst.Add(mButtonW); buttonLIst.Add(mButtonX); buttonLIst.Add(mButtonY); buttonLIst.Add(mButtonZ);
@@ -1174,13 +1181,15 @@ namespace BitfiWallet
                 b.SetText(new char[] { Sclear.SCharImage((int)b.Tag).SCHAR }, 0, 1);
                 b.Click += delegate
                 {
-                    if ((int)b.Tag \                    {
+                    if ((int)b.Tag < 52)
+                    {
                         if (capson)
                         {
-                            if ((int)b.Tag \                        }
+                            if ((int)b.Tag < 26) b.Tag = (int)b.Tag + 26;
+                        }
                         else
                         {
-                            if ((int)b.Tag \>\ 25) b.Tag = (int)b.Tag - 26;
+                            if ((int)b.Tag > 25) b.Tag = (int)b.Tag - 26;
                         }
                     }
                     KnoxAdd((int)b.Tag);
@@ -1190,7 +1199,8 @@ namespace BitfiWallet
             {
                 if (mButtonShift.Text == "^")
                 {
-                    mButtonShift.Text = "\                    mButtonA.Tag = 62; mButtonB.Tag = 63; mButtonC.Tag = 64; mButtonD.Tag = 65; mButtonE.Tag = 66; mButtonF.Tag = 67; mButtonG.Tag = 68; mButtonH.Tag = 69; mButtonI.Tag = 70; mButtonJ.Tag = 71; mButtonK.Tag = 72; mButtonL.Tag = 73; mButtonM.Tag = 74; mButtonN.Tag = 75; mButtonO.Tag = 76; mButtonP.Tag = 77; mButtonQ.Tag = 78; mButtonR.Tag = 79; mButtonS.Tag = 80; mButtonT.Tag = 81; mButtonU.Tag = 82; mButtonV.Tag = 83; mButtonW.Tag = 84; mButtonX.Tag = 85; mButtonY.Tag = 86; mButtonZ.Tag = 87;
+                    mButtonShift.Text = "<";
+                    mButtonA.Tag = 62; mButtonB.Tag = 63; mButtonC.Tag = 64; mButtonD.Tag = 65; mButtonE.Tag = 66; mButtonF.Tag = 67; mButtonG.Tag = 68; mButtonH.Tag = 69; mButtonI.Tag = 70; mButtonJ.Tag = 71; mButtonK.Tag = 72; mButtonL.Tag = 73; mButtonM.Tag = 74; mButtonN.Tag = 75; mButtonO.Tag = 76; mButtonP.Tag = 77; mButtonQ.Tag = 78; mButtonR.Tag = 79; mButtonS.Tag = 80; mButtonT.Tag = 81; mButtonU.Tag = 82; mButtonV.Tag = 83; mButtonW.Tag = 84; mButtonX.Tag = 85; mButtonY.Tag = 86; mButtonZ.Tag = 87;
                 }
                 else
                 {

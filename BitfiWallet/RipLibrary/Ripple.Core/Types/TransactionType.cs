@@ -2,9 +2,9 @@ using Ripple.Core.Enums;
 
 namespace Ripple.Core.Types
 {
-    public class TransactionType : SerializedEnumItem\\
+    public class TransactionType : SerializedEnumItem<ushort>
     {
-        public class Enumeration : SerializedEnumeration\\{}
+        public class Enumeration : SerializedEnumeration<TransactionType, ushort>{}
         public static Enumeration Values = new Enumeration();
         private TransactionType(string reference, int ordinal) : base(reference, ordinal){}
 

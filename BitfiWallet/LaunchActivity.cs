@@ -41,7 +41,7 @@ namespace BitfiWallet
                             using (Intent batteryStatus = RegisterReceiver(null, ifilter))
                             {
                                 int status = batteryStatus.GetIntExtra(BatteryManager.ExtraPlugged, -1);
-                                if (status \>\ 0 || bm.IsCharging)
+                                if (status > 0 || bm.IsCharging)
                                 {
                                     NoxKeys.Sclear.BatCharging = true;
                                 }
@@ -120,7 +120,7 @@ namespace BitfiWallet
             if (InPause) return;
             if (Busy) return;
             Busy = true;
-            Task t = Task.Factory.StartNew(() =\>\
+            Task t = Task.Factory.StartNew(() =>
             {
                 try
                 {
@@ -131,7 +131,7 @@ namespace BitfiWallet
                     {
                         CapCnt = CapCnt + 1;
                         bool captive = NoxMessage.GetCaptive();
-                        this.RunOnUiThread(() =\>\
+                        this.RunOnUiThread(() =>
                         {
                             Busy = false;
                             UIResp(captive, null);
@@ -152,7 +152,7 @@ namespace BitfiWallet
                         }
                         Thread.Sleep(500);
                         var resp = HWS.GetCurrentSMSToken(HSesseion);
-                        this.RunOnUiThread(() =\>\
+                        this.RunOnUiThread(() =>
                         {
                             Busy = false;
                             UIResp(null, resp);
@@ -174,7 +174,7 @@ namespace BitfiWallet
             }
             if (captive == false || Recheck)
             {
-                if (bwSTime \>\ DateTime.Now)
+                if (bwSTime > DateTime.Now)
                 {
                     Recheck = false;
                     StartRequest(true);
@@ -188,7 +188,7 @@ namespace BitfiWallet
             {
                 if (formUserInfo == null)
                 {
-                    if (bwSTime \>\ DateTime.Now)
+                    if (bwSTime > DateTime.Now)
                     {
                         StartRequest(false);
                     }
@@ -228,18 +228,18 @@ namespace BitfiWallet
                         {
                             AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("REQUEST " + formUserInfo.GMCToken).SetMessage("Sign-in to this request?")
                                 .SetCancelable(false)
-                                .SetNegativeButton("cancel", (EventHandler\\)null)
-                                .SetPositiveButton("continue", (EventHandler\\)null);
+                                .SetNegativeButton("cancel", (EventHandler<DialogClickEventArgs>)null)
+                                .SetPositiveButton("continue", (EventHandler<DialogClickEventArgs>)null);
                             AlertDialog alert = builder.Create();
                             alert.Show();
                             var okBtn = alert.GetButton((int)DialogButtonType.Positive);
-                            okBtn.Click += (asender, args) =\>\
+                            okBtn.Click += (asender, args) =>
                             {
                                 alert.Dismiss();
                                 InitSigninModel(formUserInfo.GMCToken);
                             };
                             var cancelBtn = alert.GetButton((int)DialogButtonType.Negative);
-                            cancelBtn.Click += (asender, args) =\>\
+                            cancelBtn.Click += (asender, args) =>
                             {
                                 alert.Dismiss();
                                 ShutDown();
@@ -252,23 +252,23 @@ namespace BitfiWallet
         }
         private void LoadWifiStatus(bool? captive)
         {
-            var tbiStatus = FindViewById\\(Resource.Id.txtNoWifi);
-            var wifilayout = FindViewById\\(Resource.Id.linearLayoutWifi);
-            var w1 = FindViewById\\(Resource.Id.imageViewW1);
-            var w2 = FindViewById\\(Resource.Id.imageViewW2);
+            var tbiStatus = FindViewById<TextView>(Resource.Id.txtNoWifi);
+            var wifilayout = FindViewById<LinearLayout>(Resource.Id.linearLayoutWifi);
+            var w1 = FindViewById<ImageView>(Resource.Id.imageViewW1);
+            var w2 = FindViewById<ImageView>(Resource.Id.imageViewW2);
             try
             {
                 if (captive == false)
                 {
-                    if (CapCnt \>\ 2)
+                    if (CapCnt > 2)
                     {
                         tbiStatus.Text = "There's no WiFi connection.";
                         wifilayout.Visibility = ViewStates.Visible;
                     }
                     w1.Visibility = ViewStates.Gone;
                     w2.Visibility = ViewStates.Visible;
-                    FindViewById\\(Resource.Id.btnAddresses).Enabled = false;
-                    FindViewById\\(Resource.Id.btnBalances).Enabled = false;
+                    FindViewById<TextView>(Resource.Id.btnAddresses).Enabled = false;
+                    FindViewById<TextView>(Resource.Id.btnBalances).Enabled = false;
                 }
                 if (captive == true)
                 {
@@ -276,8 +276,8 @@ namespace BitfiWallet
                     wifilayout.Visibility = ViewStates.Gone;
                     w1.Visibility = ViewStates.Visible;
                     w2.Visibility = ViewStates.Gone;
-                    FindViewById\\(Resource.Id.btnAddresses).Enabled = true;
-                    FindViewById\\(Resource.Id.btnBalances).Enabled = true;
+                    FindViewById<TextView>(Resource.Id.btnAddresses).Enabled = true;
+                    FindViewById<TextView>(Resource.Id.btnBalances).Enabled = true;
                 }
             }
             catch
@@ -288,16 +288,17 @@ namespace BitfiWallet
         {
             try
             {
-                LinearLayout batterylayout = FindViewById\\(Resource.Id.linearLayoutBattery);
+                LinearLayout batterylayout = FindViewById<LinearLayout>(Resource.Id.linearLayoutBattery);
                 batterylayout.Visibility = ViewStates.Gone;
-                TextView tbbStatus = FindViewById\\(Resource.Id.txtBPercent);
-                var b1 = FindViewById\\(Resource.Id.imageViewB1);
-                var b2 = FindViewById\\(Resource.Id.imageViewB2);
+                TextView tbbStatus = FindViewById<TextView>(Resource.Id.txtBPercent);
+                var b1 = FindViewById<ImageView>(Resource.Id.imageViewB1);
+                var b2 = FindViewById<ImageView>(Resource.Id.imageViewB2);
                 b1.Visibility = ViewStates.Visible;
                 b2.Visibility = ViewStates.Gone;
                 tbbStatus.Text = "";
                 bool battercharging = NoxKeys.Sclear.BatCharging; int batLevel = NoxKeys.Sclear.BatLevel; bool batterylow = false;
-                if (batLevel \                tbbStatus.Text = batLevel + "%";
+                if (batLevel < 16) batterylow = true;
+                tbbStatus.Text = batLevel + "%";
                 if (batterylow)
                 {
                     batterylayout.Visibility = ViewStates.Visible;
@@ -326,18 +327,18 @@ namespace BitfiWallet
         {
             try
             {
-                LinearLayout wifilayout = FindViewById\\(Resource.Id.linearLayoutWifi);
-                TextView tbWel = FindViewById\\(Resource.Id.txtAppCode2);
-                TextView tbWel22 = FindViewById\\(Resource.Id.txtAppCode22);
-                var w1 = FindViewById\\(Resource.Id.imageViewW1);
-                var w2 = FindViewById\\(Resource.Id.imageViewW2);
-                TextView tbbWifi = FindViewById\\(Resource.Id.txtNoWifi);
-                TextView tbbBat = FindViewById\\(Resource.Id.txtBatteryLow);
-                Button btnWifi = FindViewById\\(Resource.Id.btnWifi);
-                TextView btnWalletID = FindViewById\\(Resource.Id.btnWalletID);
-                var btnAddresses = FindViewById\\(Resource.Id.btnAddresses);
-                var btnBalances = FindViewById\\(Resource.Id.btnBalances);
-                var btnMessage = FindViewById\\(Resource.Id.btnMessage);
+                LinearLayout wifilayout = FindViewById<LinearLayout>(Resource.Id.linearLayoutWifi);
+                TextView tbWel = FindViewById<TextView>(Resource.Id.txtAppCode2);
+                TextView tbWel22 = FindViewById<TextView>(Resource.Id.txtAppCode22);
+                var w1 = FindViewById<ImageView>(Resource.Id.imageViewW1);
+                var w2 = FindViewById<ImageView>(Resource.Id.imageViewW2);
+                TextView tbbWifi = FindViewById<TextView>(Resource.Id.txtNoWifi);
+                TextView tbbBat = FindViewById<TextView>(Resource.Id.txtBatteryLow);
+                Button btnWifi = FindViewById<Button>(Resource.Id.btnWifi);
+                TextView btnWalletID = FindViewById<Button>(Resource.Id.btnWalletID);
+                var btnAddresses = FindViewById<Button>(Resource.Id.btnAddresses);
+                var btnBalances = FindViewById<Button>(Resource.Id.btnBalances);
+                var btnMessage = FindViewById<Button>(Resource.Id.btnMessage);
                 try
                 {
                     wifilayout.Visibility = ViewStates.Gone;
@@ -400,7 +401,7 @@ namespace BitfiWallet
                 AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .SetTitle("[" + NoxKeys.Sclear.ThisVName + "]")
                 .SetMessage("DEVICE ID: " + NoxKeys.Sclear.WALLETID).SetCancelable(true)
-                .SetPositiveButton("ok", (EventHandler\\)null);
+                .SetPositiveButton("ok", (EventHandler<DialogClickEventArgs>)null);
                 alert = builder.Create();
                 this.FindViewById(Resource.Id.btnWalletID).Click += delegate
                 {
@@ -409,10 +410,10 @@ namespace BitfiWallet
                         alert.Show();
 
                         var okBtn = alert.GetButton((int)DialogButtonType.Positive);
-                        okBtn.Click += (asender, args) =\>\
+                        okBtn.Click += (asender, args) =>
                         {
                             alert.Dismiss();
-                            Task t = Task.Factory.StartNew(() =\>\
+                            Task t = Task.Factory.StartNew(() =>
                             {
                                 try
                                 {
@@ -439,34 +440,34 @@ namespace BitfiWallet
         public override void OnBackPressed()
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, Resource.Style.MyAlertDialogTheme).SetTitle("Close wallet?").SetMessage("").SetCancelable(false)
-              .SetNegativeButton("NO", (EventHandler\\)null)
-           .SetPositiveButton("YES", (EventHandler\\)null);
+              .SetNegativeButton("NO", (EventHandler<DialogClickEventArgs>)null)
+           .SetPositiveButton("YES", (EventHandler<DialogClickEventArgs>)null);
             AlertDialog talert = builder.Create();
             InPause = true;
             talert.Show();
 
             var okBtn = talert.GetButton((int)DialogButtonType.Positive);
-            okBtn.Click += (asender, args) =\>\
+            okBtn.Click += (asender, args) =>
                {
-                   talert.Dismiss();
-                   Task t = Task.Factory.StartNew(() =\>\
+                talert.Dismiss();
+                Task t = Task.Factory.StartNew(() =>
                    {
-                       Thread.Sleep(200);
-                       Busy = true;
-                       InPause = true;
-                       HSesseion = Guid.NewGuid();
-                       bwSTime = DateTime.Now.AddDays(-2);
-                       this.RunOnUiThread(() =\>\
+                    Thread.Sleep(200);
+                    Busy = true;
+                    InPause = true;
+                    HSesseion = Guid.NewGuid();
+                    bwSTime = DateTime.Now.AddDays(-2);
+                    this.RunOnUiThread(() =>
                        {
-                           Finish();
-                           base.OnBackPressed();
-                       });
-                   });
+                        Finish();
+                        base.OnBackPressed();
+                    });
+                });
 
 
-               };
+            };
             var noBtn = talert.GetButton((int)DialogButtonType.Negative);
-            noBtn.Click += (asender, args) =\>\
+            noBtn.Click += (asender, args) =>
             {
                 talert.Dismiss();
                 InPause = false;
@@ -512,18 +513,18 @@ namespace BitfiWallet
                 .SetTitle("")
                 .SetMessage("SIGN MESSAGE?")
                 .SetCancelable(true)
-                .SetNegativeButton("NO", (EventHandler\\)null)
-                .SetPositiveButton("Yes, Continue", (EventHandler\\)null);
+                .SetNegativeButton("NO", (EventHandler<DialogClickEventArgs>)null)
+                .SetPositiveButton("Yes, Continue", (EventHandler<DialogClickEventArgs>)null);
                 AlertDialog alert = builder.Create();
                 alert.Show();
                 var okBtn = alert.GetButton((int)DialogButtonType.Positive);
                 var nokBtn = alert.GetButton((int)DialogButtonType.Negative);
-                nokBtn.Click += (asender, args) =\>\
+                nokBtn.Click += (asender, args) =>
                 {
                     ShutDown();
                     alert.Dismiss();
                 };
-                okBtn.Click += (asender, args) =\>\
+                okBtn.Click += (asender, args) =>
                 {
                     StartSAct("message", formUserInfo.SMSToken);
                     alert.Dismiss();
@@ -541,18 +542,18 @@ namespace BitfiWallet
                 .SetTitle("")
                 .SetMessage("CLAIM GAS?")
                 .SetCancelable(true)
-                .SetNegativeButton("NO", (EventHandler\\)null)
-                .SetPositiveButton("Yes, Continue", (EventHandler\\)null);
+                .SetNegativeButton("NO", (EventHandler<DialogClickEventArgs>)null)
+                .SetPositiveButton("Yes, Continue", (EventHandler<DialogClickEventArgs>)null);
                 AlertDialog alert = builder.Create();
                 alert.Show();
                 var okBtn = alert.GetButton((int)DialogButtonType.Positive);
                 var nokBtn = alert.GetButton((int)DialogButtonType.Negative);
-                nokBtn.Click += (asender, args) =\>\
+                nokBtn.Click += (asender, args) =>
                 {
                     ShutDown();
                     alert.Dismiss();
                 };
-                okBtn.Click += (asender, args) =\>\
+                okBtn.Click += (asender, args) =>
                 {
                     StartSAct("gas", formUserInfo.SMSToken);
                     alert.Dismiss();
@@ -570,18 +571,18 @@ namespace BitfiWallet
                 .SetTitle("")
                 .SetMessage("REBUILD LIST FOR XMR BALANCE?")
                 .SetCancelable(true)
-                .SetNegativeButton("NO", (EventHandler\\)null)
-                .SetPositiveButton("Yes, Continue", (EventHandler\\)null);
+                .SetNegativeButton("NO", (EventHandler<DialogClickEventArgs>)null)
+                .SetPositiveButton("Yes, Continue", (EventHandler<DialogClickEventArgs>)null);
                 AlertDialog alert = builder.Create();
                 alert.Show();
                 var okBtn = alert.GetButton((int)DialogButtonType.Positive);
                 var nokBtn = alert.GetButton((int)DialogButtonType.Negative);
-                nokBtn.Click += (asender, args) =\>\
+                nokBtn.Click += (asender, args) =>
                 {
                     ShutDown();
                     alert.Dismiss();
                 };
-                okBtn.Click += (asender, args) =\>\
+                okBtn.Click += (asender, args) =>
                 {
                     StartSAct("image", formUserInfo.SMSToken);
                     alert.Dismiss();
@@ -599,18 +600,18 @@ namespace BitfiWallet
                 .SetTitle("")
                 .SetMessage("ADD NEW ADDRESS?")
                 .SetCancelable(true)
-                .SetNegativeButton("NO", (EventHandler\\)null)
-                .SetPositiveButton("Yes, Continue", (EventHandler\\)null);
+                .SetNegativeButton("NO", (EventHandler<DialogClickEventArgs>)null)
+                .SetPositiveButton("Yes, Continue", (EventHandler<DialogClickEventArgs>)null);
                 AlertDialog alert = builder.Create();
                 alert.Show();
                 var okBtn = alert.GetButton((int)DialogButtonType.Positive);
                 var nokBtn = alert.GetButton((int)DialogButtonType.Negative);
-                nokBtn.Click += (asender, args) =\>\
+                nokBtn.Click += (asender, args) =>
                 {
                     ShutDown();
                     alert.Dismiss();
                 };
-                okBtn.Click += (asender, args) =\>\
+                okBtn.Click += (asender, args) =>
                 {
                     StartSAct("address", formUserInfo.SMSToken);
                     alert.Dismiss();
@@ -628,18 +629,18 @@ namespace BitfiWallet
                 .SetTitle("SIGN")
                 .SetMessage("Sign and pay?")
                 .SetCancelable(true)
-                .SetNegativeButton("NO", (EventHandler\\)null)
-                .SetPositiveButton("Yes, Continue", (EventHandler\\)null);
+                .SetNegativeButton("NO", (EventHandler<DialogClickEventArgs>)null)
+                .SetPositiveButton("Yes, Continue", (EventHandler<DialogClickEventArgs>)null);
                 AlertDialog alert = builder.Create();
                 alert.Show();
                 var okBtn = alert.GetButton((int)DialogButtonType.Positive);
                 var nokBtn = alert.GetButton((int)DialogButtonType.Negative);
-                nokBtn.Click += (asender, args) =\>\
+                nokBtn.Click += (asender, args) =>
                 {
                     ShutDown();
                     alert.Dismiss();
                 };
-                okBtn.Click += (asender, args) =\>\
+                okBtn.Click += (asender, args) =>
                 {
                     StartSAct("sign", formUserInfo.SMSToken);
                     alert.Dismiss();
@@ -685,4 +686,3 @@ namespace BitfiWallet
         }
     }
 }
-

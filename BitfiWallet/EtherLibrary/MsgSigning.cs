@@ -21,7 +21,7 @@ namespace EthereumLibrary
         }
         private byte[] HashPrefixedMessage(byte[] message)
         {
-            var byteList = new List\\();
+            var byteList = new List<byte>();
             var bytePrefix = "0x19".HexToByteArray();
             var textBytePrefix = Encoding.UTF8.GetBytes("Ethereum Signed Message:\n" + message.Length);
             byteList.AddRange(bytePrefix);

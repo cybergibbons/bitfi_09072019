@@ -7,7 +7,7 @@ using Ripple.Core.Types;
 
 namespace Ripple.Core.Transactions
 {
-    public class TxFormat : Dictionary\\
+    public class TxFormat : Dictionary<Field, TxFormat.Requirement>
     {
         public enum Requirement
         {
@@ -38,15 +38,15 @@ namespace Ripple.Core.Transactions
 
         public static void Validate(StObject obj)
         {
-            var errors = new List\\();
+            var errors = new List<string>();
             Validate(obj, errors.Add);
-            if (errors.Count \>\ 0)
+            if (errors.Count > 0)
             {
                 throw new TxFormatValidationException(string.Join("\n", errors));
             }
         }
 
-        internal static void Validate(StObject obj, Action\\ onError)
+        internal static void Validate(StObject obj, Action<string> onError)
         {
             if (!obj.Has(Field.TransactionType))
             {
@@ -62,7 +62,7 @@ namespace Ripple.Core.Transactions
             }
 
             var format = Formats[tt];
-            var allFields = new SortedSet\\(obj.Fields.Keys);
+            var allFields = new SortedSet<Field>(obj.Fields.Keys);
             allFields.UnionWith(format.Keys);
 
             foreach (var field in allFields)
@@ -92,11 +92,11 @@ namespace Ripple.Core.Transactions
             }
         }
 
-        public static Dictionary\\ Formats;
+        public static Dictionary<TransactionType, TxFormat> Formats;
 
         static TxFormat()
         {
-            Formats = new Dictionary\\
+            Formats = new Dictionary<TransactionType, TxFormat>
             {
                 [TransactionType.AccountSet] = new TxFormat
                 {

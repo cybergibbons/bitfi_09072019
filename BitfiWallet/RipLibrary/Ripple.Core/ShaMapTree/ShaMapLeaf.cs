@@ -7,17 +7,17 @@ namespace Ripple.Core.ShaMapTree
     public class ShaMapLeaf : ShaMapNode
     {
         public Hash256 Index;
-        public IShaMapItem\\ Item;
+        public IShaMapItem<object> Item;
         public long Version = -1;
 
-        protected internal ShaMapLeaf(Hash256 index, IShaMapItem\\ item)
+        protected internal ShaMapLeaf(Hash256 index, IShaMapItem<object> item)
         {
             Index = index;
             Item = item;
         }
 
-        public override bool IsLeaf =\>\ true;
-        public override bool IsInner =\>\ false;
+        public override bool IsLeaf => true;
+        public override bool IsInner => false;
 
         internal override HashPrefix Prefix()
         {

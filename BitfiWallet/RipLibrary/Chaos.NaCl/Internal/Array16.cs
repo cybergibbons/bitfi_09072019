@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Chaos.NaCl.Internal
 {
-    // Array16\\ Salsa20 state
-    // Array16\\ SHA-512 block
-    internal struct Array16\\
+    // Array16<UInt32> Salsa20 state
+    // Array16<UInt64> SHA-512 block
+    internal struct Array16<T>
     {
         public T x0;
         public T x1;

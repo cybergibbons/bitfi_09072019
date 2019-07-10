@@ -20,7 +20,8 @@ namespace MoneroWallet
             }
             int NumberChars = hex.Length;
             byte[] bytes = new byte[NumberChars / 2];
-            for (int i = 0; i \                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            for (int i = 0; i < NumberChars; i += 2)
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
             return bytes;
         }
         public static bool IsValidHex(string hex)
@@ -61,21 +62,25 @@ namespace MoneroWallet
         }
         public void Dispose()
         {
-            for (int i = 0; i \            {
+            for (int i = 0; i < Seed.Length; ++i)
+            {
                 Seed[i] = 0;
             }
-            for (int i = 0; i \            {
+            for (int i = 0; i < Keys.SpendSecret.Length; ++i)
+            {
                 Keys.SpendSecret[i] = 0;
             }
-            for (int i = 0; i \            {
+            for (int i = 0; i < Keys.SpendPublic.Length; ++i)
+            {
                 Keys.SpendPublic[i] = 0;
             }
-            for (int i = 0; i \            {
+            for (int i = 0; i < Keys.ViewSecret.Length; ++i)
+            {
                 Keys.ViewSecret[i] = 0;
             }
         }
     }
-  //  [Android.Runtime.Preserve(AllMembers = true)]
+    //  [Android.Runtime.Preserve(AllMembers = true)]
     public class Keys
     {
         //Spend
@@ -85,7 +90,7 @@ namespace MoneroWallet
         public byte[] ViewPublic { get; set; }
         public byte[] ViewSecret { get; set; }
     }
-   // [Android.Runtime.Preserve(AllMembers = true)]
+    // [Android.Runtime.Preserve(AllMembers = true)]
     public class Destination
     {
         public DecodedAddress Keys { get; set; }
@@ -99,7 +104,7 @@ namespace MoneroWallet
         public string view { get; set; }
         public string intPaymentId { get; set; }
     }
-  //  [Android.Runtime.Preserve(AllMembers = true)]
+    //  [Android.Runtime.Preserve(AllMembers = true)]
     public class Rates
     {
         public Double AUD { get; set; }
@@ -124,7 +129,7 @@ namespace MoneroWallet
         public Double RUB { get; set; }
         public Double ZAR { get; set; }
     }
- //   [Android.Runtime.Preserve(AllMembers = true)]
+    //   [Android.Runtime.Preserve(AllMembers = true)]
     public class AddressInfo
     {
         public string lockedFunds { get; set; }
@@ -139,7 +144,7 @@ namespace MoneroWallet
         public Output[] spentOutputs { get; set; }
         public Rates rates { get; set; }
     }
-   // [Android.Runtime.Preserve(AllMembers = true)]
+    // [Android.Runtime.Preserve(AllMembers = true)]
     public class LedgerData
     {
         public Destination[] destinations { get; set; }
@@ -158,7 +163,7 @@ namespace MoneroWallet
         public string Amount { get; set; }
         public Output[] Outputs { get; set; }
     }
-   // [Android.Runtime.Preserve(AllMembers = true)]
+    // [Android.Runtime.Preserve(AllMembers = true)]
     public class Output
     {
         public string Key { get; set; }
@@ -179,7 +184,7 @@ namespace MoneroWallet
         public string TxPrefixHash { get; set; }
         public string TxPubKey { get; set; }
     }
-  //  [Android.Runtime.Preserve(AllMembers = true)]
+    //  [Android.Runtime.Preserve(AllMembers = true)]
     public class TxRecord
     {
         public bool coinbase { get; set; }
@@ -196,7 +201,7 @@ namespace MoneroWallet
         public Output[] spentOutputs { get; set; }
         public string approxFloatAmount { get; set; }
     }
- //   [Android.Runtime.Preserve(AllMembers = true)]
+    //   [Android.Runtime.Preserve(AllMembers = true)]
     public class TxHistory
     {
         public UInt64 blockchainHeight { get; set; }
@@ -207,7 +212,7 @@ namespace MoneroWallet
         public UInt64 transactionHeight { get; set; }
         public TxRecord[] transactions { get; set; }
     }
- //   [Android.Runtime.Preserve(AllMembers = true)]
+    //   [Android.Runtime.Preserve(AllMembers = true)]
     public class TxToSubmit
     {
         public string rawTx { get; set; }

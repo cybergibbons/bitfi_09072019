@@ -27,7 +27,7 @@ namespace NeoGasLibrary.NeoRpc
     private string GetBestRpcEndpoint()
     {
       var endpoints = NeoscanApi.GetRpcEndpointsFull();
-      var ordered = endpoints.OrderByDescending(v =\>\ v.Height).ToArray();
+      var ordered = endpoints.OrderByDescending(v => v.Height).ToArray();
       return ordered[0].Url;
       /*
       var endpoints = NeoscanApi.GetRPCEndpoints();

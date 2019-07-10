@@ -6,7 +6,7 @@ using Ripple.Core.Types;
 
 namespace Ripple.Core.ShaMapTree
 {
-    public class TransactionResult : IShaMapItem\\
+    public class TransactionResult : IShaMapItem<TransactionResult>
     {
         public readonly StObject Tx;
         public readonly StObject Meta;
@@ -26,7 +26,7 @@ namespace Ripple.Core.ShaMapTree
             ser.AddLengthEncoded(Meta);
         }
 
-        public IShaMapItem\\ Copy()
+        public IShaMapItem<TransactionResult> Copy()
         {
             return this;
         }

@@ -96,7 +96,7 @@ namespace BitfiWallet
                 {
                     System.IO.StreamReader sr = new System.IO.StreamReader(stream);
                     var result = sr.ReadToEnd();
-                    return JsonConvert.DeserializeObject\\(result);
+                    return JsonConvert.DeserializeObject<TxnResponse>(result);
                 }
             }
             catch (WebException)

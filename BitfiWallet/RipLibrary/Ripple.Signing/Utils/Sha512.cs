@@ -25,9 +25,9 @@ namespace Ripple.Signing.Utils
 
         public Sha512 AddU32(uint i)
         {
-            _digest.Update((byte)(i \>\\>\ 24 & 0xFFu));
-            _digest.Update((byte)(i \>\\>\ 16 & 0xFFu));
-            _digest.Update((byte)(i \>\\>\ 8 & 0xFFu));
+            _digest.Update((byte)(i >> 24 & 0xFFu));
+            _digest.Update((byte)(i >> 16 & 0xFFu));
+            _digest.Update((byte)(i >> 8 & 0xFFu));
             _digest.Update((byte)(i & 0xFFu));
             return this;
         }

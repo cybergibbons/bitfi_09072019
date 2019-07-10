@@ -10,9 +10,9 @@ namespace Chaos.NaCl
         public abstract int SignatureSizeInBytes { get; }
 
         public abstract byte[] Sign(byte[] message, byte[] key);
-        public abstract void Sign(ArraySegment\\ signature, ArraySegment\\ message, ArraySegment\\ key);
+        public abstract void Sign(ArraySegment<byte> signature, ArraySegment<byte> message, ArraySegment<byte> key);
         public abstract bool Verify(byte[] signature, byte[] message, byte[] key);
-        public abstract bool Verify(ArraySegment\\ signature, ArraySegment\\ message, ArraySegment\\ key);
+        public abstract bool Verify(ArraySegment<byte> signature, ArraySegment<byte> message, ArraySegment<byte> key);
 
         public static OneTimeAuth Poly1305 { get { return _poly1305; } }
     }

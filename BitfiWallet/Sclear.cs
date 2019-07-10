@@ -7,11 +7,11 @@ using NBitcoin;
 namespace NoxKeys
 {
     internal class Sclear
-    { 
+    {
         private static RCharImages[] _CharImageList;
         internal static RCharImages SCharImage(int pos)
         {
-           return _CharImageList[pos];
+            return _CharImageList[pos];
         }
         internal readonly struct RCharImages
         {
@@ -49,7 +49,7 @@ namespace NoxKeys
         }
         private static RCharImages[] ASet()
         {
-            List\\ CharImageList = new List\\();
+            List<CharImages> CharImageList = new List<CharImages>();
             CharImages item;
             item = new CharImages(); item.DEC = 97; //item.CHAR = "a";
             item.B64 = "iVBORw0KGgoAAAANSUhEUgAAAAcAAAAMCAYAAACulacQAAAAf0lEQVQoU7XQMQ4BUQCE4e9p9wA6tWKPsQlxAMdwBGuLrVQqF1ApFUKiUOu2cwitSsKGJ0HEdqb9M/knEzQk/AuW2i726D4VJy2ZserbOTFHR2IYYW4kmL2NW0dY6LnZCPpyWx/NCBcPzz1XOxxicypxtsQAR6yQvpw/nmh8qAZyxRj7W2dbdwAAAABJRU5ErkJggg=="; item.POS = 0; CharImageList.Add(item);
@@ -193,9 +193,10 @@ namespace NoxKeys
             item.B64 = "iVBORw0KGgoAAAANSUhEUgAAAAcAAAAMCAYAAACulacQAAAALElEQVQoU2NkwAMYwXL1DHkMjAwToepmMDQwZILYEEkYaGCYDmaOSEkcIQQAr4wYDa61zLwAAAAASUVORK5CYII="; item.POS = 69; CharImageList.Add(item);
             item = new CharImages(); item.DEC = 47; //item.CHAR = "/";
             item.B64 = "iVBORw0KGgoAAAANSUhEUgAAAAcAAAAMCAYAAACulacQAAAAi0lEQVQoU5XQsQnCQBSA4e8Kqwxg5wquYJcNrFzARmysLGIEKxuxyQ5uELBwHQdIJRg5glwiInjtz/fu3QU/Tvgv7lSYyMyHcm/q6SpYKNTD2FM2mhQPxh5ugnVUcZcUCytBHu+KKsW3alVK5/cLOtmppZGZrXuKR5nGRavuq25sKdc6farhQl++6gWuuiCjwKo9FgAAAABJRU5ErkJggg=="; item.POS = 70; CharImageList.Add(item);
-            item = new CharImages(); item.DEC = 62; //item.CHAR = "\>\";
+            item = new CharImages(); item.DEC = 62; //item.CHAR = ">";
             item.B64 = "iVBORw0KGgoAAAANSUhEUgAAAAcAAAAMCAYAAACulacQAAAAWklEQVQoU2NkwAMYKZRsYJgONqGBIRPZJIixjQzuDP8ZdjAwMMxAVoCws4lBn+Efwx4GBoZTDNwMYQylDF9RHdTKIM7wm+EA2DRWBgcidOK1E69rcYQE3hACAEPVGKk3wOzzAAAAAElFTkSuQmCC"; item.POS = 71; CharImageList.Add(item);
-            item = new CharImages(); item.DEC = 60; //item.CHAR = "\            item.B64 = "iVBORw0KGgoAAAANSUhEUgAAAAcAAAAMCAYAAACulacQAAAAY0lEQVQoU2NkwAMYqSTZyiDO8JvhAAMjQwFDPcNOhLFNDPoM/xj2MDAwnGLgZghjKGX4CpFESKxhaGDIhLmDkaGRwZ3hP8MOhv8M+QyNDJOQHUhAJ0wpTjthCnC6Fkto4A0hAB7HHw0TiRuBAAAAAElFTkSuQmCC"; item.POS = 72; CharImageList.Add(item);
+            item = new CharImages(); item.DEC = 60; //item.CHAR = "<";
+            item.B64 = "iVBORw0KGgoAAAANSUhEUgAAAAcAAAAMCAYAAACulacQAAAAY0lEQVQoU2NkwAMYqSTZyiDO8JvhAAMjQwFDPcNOhLFNDPoM/xj2MDAwnGLgZghjKGX4CpFESKxhaGDIhLmDkaGRwZ3hP8MOhv8M+QyNDJOQHUhAJ0wpTjthCnC6Fkto4A0hAB7HHw0TiRuBAAAAAElFTkSuQmCC"; item.POS = 72; CharImageList.Add(item);
             item = new CharImages(); item.DEC = 63; //item.CHAR = "?";
             item.B64 = "iVBORw0KGgoAAAANSUhEUgAAAAcAAAAMCAYAAACulacQAAAAcElEQVQoU2NkwAMYCUs2Mrgz/GfYAVbIyODBUM+wE8JEBvUMeQyMDBNhClAlWxnEGX4zHGBgYDjA0MCQiV3yP8N0hkaGSRDJbgZuhq8MqxgYGLwYGBi2MXAzhDGUMnwlwrVodsHcCNGJVxJHSOC1EwDSox0N8R+oSAAAAABJRU5ErkJggg=="; item.POS = 73; CharImageList.Add(item);
             item = new CharImages(); item.DEC = 46; //item.CHAR = ".";
@@ -228,7 +229,7 @@ namespace NoxKeys
             item.B64 = "iVBORw0KGgoAAAANSUhEUgAAAAcAAAAMCAYAAACulacQAAAARElEQVQoU2NkwAMYCUs2MExnYGCQY2BgaGVgYJjHwMQQzlDHcBGis54hj4GRwR2fpCYDE8MMhn8MK1F14rCYCAcNIp0APa4NDUdRuj8AAAAASUVORK5CYII="; item.POS = 87; CharImageList.Add(item);
             item = new CharImages(); item.DEC = 32; //item.CHAR = " ";
             item.B64 = "iVBORw0KGgoAAAANSUhEUgAAAAcAAAAMCAYAAACulacQAAAAE0lEQVQoU2NkwAMYRyUZGMgPBAAKMgANjdZyFAAAAABJRU5ErkJggg=="; item.POS = 88; CharImageList.Add(item);
-            List\\ RCharImageList = new List\\();
+            List<RCharImages> RCharImageList = new List<RCharImages>();
             foreach (var imgv in CharImageList)
             {
                 byte[] BTS = Convert.FromBase64String(imgv.B64);
@@ -258,7 +259,8 @@ namespace NoxKeys
         public static void EraseBytes(byte[] keybytes)
         {
             if (keybytes == null) return;
-            for (int i = 0; i \            {
+            for (int i = 0; i < keybytes.Length; i++)
+            {
                 keybytes[i] = 48;
             }
             Clear(keybytes);
@@ -266,7 +268,8 @@ namespace NoxKeys
         public static void EraseIntegers(int[] array)
         {
             if (array == null) return;
-            for (int i = 0; i \            {
+            for (int i = 0; i < array.Length; i++)
+            {
                 array[i] = -1;
             }
             Clear(array);

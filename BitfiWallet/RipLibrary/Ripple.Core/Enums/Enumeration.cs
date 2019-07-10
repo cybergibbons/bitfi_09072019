@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Ripple.Core.Enums
 {
-    public class Enumeration\\ : IEnumerable\\ where T : EnumItem
+    public class Enumeration<T> : IEnumerable<T> where T : EnumItem
     {
-        private readonly Dictionary\\ _byText = new Dictionary\\();
-        private readonly Dictionary\\ _byOrdinal
-            = new Dictionary\\();
-        private readonly List\\ _byDefinitionOrder = new List\\(); 
+        private readonly Dictionary<string, T> _byText = new Dictionary<string, T>();
+        private readonly Dictionary<int, T> _byOrdinal
+            = new Dictionary<int, T>();
+        private readonly List<T> _byDefinitionOrder = new List<T>(); 
 
         public T this[string name]
         {
@@ -36,7 +36,7 @@ namespace Ripple.Core.Enums
             return T;
         }
 
-        public IEnumerator\\ GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             return _byDefinitionOrder.GetEnumerator();
         }

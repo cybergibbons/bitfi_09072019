@@ -40,9 +40,9 @@ namespace Ripple.Core.ShaMapTree
             return new Hash256(half.Finish256());
         }
 
-        /// \\
+        /// <summary>
         /// Walk any leaves, possibly this node itself, if it's terminal.
-        /// \\
+        /// </summary>
         public void WalkAnyLeaves(OnLeaf leafWalker)
         {
             if (IsLeaf)

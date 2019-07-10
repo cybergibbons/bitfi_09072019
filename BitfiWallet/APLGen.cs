@@ -31,7 +31,7 @@ namespace NoxKeys
             var info = serialized.deserialize();
             Amount = NumUtils.Utils.ParseMoney(Amount, 8).ToString();
             //Fee = ParseMoney(Fee, 8).ToString();
-             if (info.amount != Amount) return "Invalid Amount.";
+            if (info.amount != Amount) return "Invalid Amount.";
             if (info.to != ToAddress) return "Invalid Address.";
             if (info.fee != Fee) return "Invalid Fee.";
             return null;

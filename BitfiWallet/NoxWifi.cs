@@ -19,7 +19,7 @@ namespace BitfiWallet
     {
 
         string[] wifis;
-        public static List\\ filtered = null;
+        public static List<string> filtered = null;
         static Activity activity;
         protected override void OnCreate(Bundle bundle)
         {
@@ -72,62 +72,63 @@ namespace BitfiWallet
                             wifi.SetWifiEnabled(true);
                         }
 
-                using (ConnectivityManager cm = (ConnectivityManager)GetSystemService(Context.ConnectivityService))
-                {
-                    if (cm != null)
-                    {
-                        using (NetworkInfo activeNetwork = cm.ActiveNetworkInfo)
+                        using (ConnectivityManager cm = (ConnectivityManager)GetSystemService(Context.ConnectivityService))
                         {
-                            if (activeNetwork != null && activeNetwork.IsConnected)
+                            if (cm != null)
                             {
-                                SSID = SSID.Replace("\"", "");
-                                status = ": CONNECTED TO INTERNET. Select a network from the list below to modify or establish a connection.";
-                                status = SSID + status;
-                            }
-                            else
-                            {
-                                if (activeNetwork == null)
+                                using (NetworkInfo activeNetwork = cm.ActiveNetworkInfo)
                                 {
-                                    status = "WIFI NETWORKS: ";
-                                }
-                                else
-                                {
-                                    if (!string.IsNullOrEmpty(SSID))
+                                    if (activeNetwork != null && activeNetwork.IsConnected)
                                     {
-                                        status = " OBTAINING IP ADDRESS...";
+                                        SSID = SSID.Replace("\"", "");
+                                        status = ": CONNECTED TO INTERNET. Select a network from the list below to modify or establish a connection.";
                                         status = SSID + status;
                                     }
                                     else
                                     {
-                                        status = "WIFI NETWORKS: ATTEMPTING CONNECTION...";
+                                        if (activeNetwork == null)
+                                        {
+                                            status = "WIFI NETWORKS: ";
+                                        }
+                                        else
+                                        {
+                                            if (!string.IsNullOrEmpty(SSID))
+                                            {
+                                                status = " OBTAINING IP ADDRESS...";
+                                                status = SSID + status;
+                                            }
+                                            else
+                                            {
+                                                status = "WIFI NETWORKS: ATTEMPTING CONNECTION...";
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                }
-                IList\\ wifiScanList = wifi.ScanResults;
-                    if (wifiScanList != null)
-                    {
-                        wifis = new string[wifiScanList.Count];
-                        for (int i = 0; i \                        {
-                            wifis[i] = ((wifiScanList[i]).ToString());
-                        }
-                        filtered = new List\\();
-                        filtered.Add(status);
-                        int counter = 0;
-                        foreach (string eachWifi in wifis)
+                        IList<ScanResult> wifiScanList = wifi.ScanResults;
+                        if (wifiScanList != null)
                         {
-                            var rx = new string[] { "," };
-                            string[] temp = eachWifi.Split(rx, StringSplitOptions.None);
-                            string lval = temp[0].Substring(5).Trim();
-                            if (!string.IsNullOrEmpty(lval) && lval.Length \>\ 3)
+                            wifis = new string[wifiScanList.Count];
+                            for (int i = 0; i < wifiScanList.Count; i++)
+                        {
+                                wifis[i] = ((wifiScanList[i]).ToString());
+                            }
+                            filtered = new List<string>();
+                            filtered.Add(status);
+                            int counter = 0;
+                            foreach (string eachWifi in wifis)
                             {
-                                filtered.Add(lval);
-                                counter++;
+                                var rx = new string[] { "," };
+                                string[] temp = eachWifi.Split(rx, StringSplitOptions.None);
+                                string lval = temp[0].Substring(5).Trim();
+                                if (!string.IsNullOrEmpty(lval) && lval.Length > 3)
+                            {
+                                    filtered.Add(lval);
+                                    counter++;
+                                }
                             }
                         }
-                    }
                     }
                 }
                 ListAdapter = new MyListAdapter(this);
@@ -174,7 +175,7 @@ namespace BitfiWallet
                 try
                 {
                     convertView = LayoutInflater.From(context).Inflate(Resource.Layout.nlist, parent, false);
-                    TextView tv1 = convertView.FindViewById\\(Resource.Id.label);
+                    TextView tv1 = convertView.FindViewById<TextView>(Resource.Id.label);
                     tv1.Text = filtered[position];
                     check = check + 1;
                     convertView.FindViewById(Resource.Id.label).Click += delegate {
@@ -221,8 +222,9 @@ namespace BitfiWallet
                                 }
                             }
 
-                            IList\\ wifiScanList = wifi.ConfiguredNetworks;
-                            for (int i = 0; i \                            {
+                            IList<WifiConfiguration> wifiScanList = wifi.ConfiguredNetworks;
+                            for (int i = 0; i < wifiScanList.Count; i++)
+                            {
                                 if (((wifiScanList[i]).ToString()).Contains("hasEverConnected: true"))
                                 {
                                     String cw = wifiScanList[i].Ssid.Replace("\"", "").Trim();

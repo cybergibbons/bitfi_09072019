@@ -35,7 +35,7 @@ namespace Ripple.Core.Types
             if (isIou)
             {
                 mantissa[0] = 0;
-                var exponent = ((b1 & 0x3F) \\\>\ 6) - 97;
+                var exponent = ((b1 & 0x3F) << 2) + ((b2 & 0xff) >> 6) - 97;
                 mantissa[1] &= 0x3F;
                 value = new IouValue(mantissa, sign, exponent);
             }
@@ -49,7 +49,7 @@ namespace Ripple.Core.Types
 
         internal static ulong ParseMantissa(byte[] mantissa)
         {
-            if (mantissa.Length \>\ 8)
+            if (mantissa.Length > 8)
             {
                 throw new PrecisionException("Encoded mantissa must be only 8 bytes maximum");
             }
@@ -62,7 +62,7 @@ namespace Ripple.Core.Types
         public readonly ulong Mantissa;
         public readonly bool IsNegative;
 
-        public bool IsZero =\>\ Mantissa == 0;
+        public bool IsZero => Mantissa == 0;
         public readonly int Exponent;
         public readonly int Precision;
 
@@ -144,7 +144,7 @@ namespace Ripple.Core.Types
             var precision = trimmed.Length;
             var isNegative = signGroup.Success && signGroup.Value == "-";
 
-            if (precision \>\ MaxPrecision)
+            if (precision > MaxPrecision)
             {
 
                 throw new PrecisionException();
@@ -165,13 +165,18 @@ namespace Ripple.Core.Types
             }
             var e = 16 - Precision + Exponent;
             var str = Mantissa.ToString().Substring(0, Precision);
-            while (e \>\ 0)
+            while (e > 0)
             {
                 str += 0;
                 e--;
             }
             var decimalPos = 0;
-            while (e \\ str.Length)
+            while (e <= 0)
+            {
+                decimalPos++;
+                e++;
+            }
+            while (decimalPos > str.Length)
             {
                 str = "0" + str;
             }
@@ -193,13 +198,49 @@ namespace Ripple.Core.Types
         private static void Normalize(ref ulong mantissa, ref int exponent)
         {
             if (mantissa == 0) return;
-            while (mantissa \\ MaxMantissa)
+            while (mantissa < MinMantissa)
+            {
+                mantissa *= 10;
+                exponent -= 1;
+            }
+            while (mantissa > MaxMantissa)
             {
                 mantissa /= 10;
                 exponent += 1;
             }
-            if (exponent \>\ MaxExponent || exponent \\\>\ 2);
-            mantissa[1] |= (byte) ((exponentByte & 0x03) \\ true;
+            if (exponent > MaxExponent || exponent < MinExponent)
+            {
+                throw new PrecisionException();
+            }
+        }
+
+        private static ulong Ul(string s)
+        {
+            return ulong.Parse(s.Replace(",", ""));
+        }
+
+        public override byte[] ToBytes()
+        {
+            var notNegative = !IsNegative;
+            var mantissa = MantissaBytes();
+
+            // Set the top bit for IOU
+            mantissa[0] |= 0x80;
+            if (IsZero) return mantissa;
+
+            if (notNegative)
+            {
+                mantissa[0] |= 0x40;
+            }
+
+            var exponent = Exponent;
+            var exponentByte = 97 + exponent;
+            mantissa[0] |= (byte) (exponentByte >> 2);
+            mantissa[1] |= (byte) ((exponentByte & 0x03) << 6);
+            return mantissa;
+        }
+
+        public override bool IsIou => true;
 
         public byte[] MantissaBytes()
         {
@@ -212,9 +253,58 @@ namespace Ripple.Core.Types
         public bool IsNegative;
         public ulong Mantissa;
 
-        public override bool IsIou =\>\ false;
+        public override bool IsIou => false;
 
         public NativeValue(string value)
         {
             var parsed = long.Parse(value);
-            IsNegative = parsed \
+            IsNegative = parsed < 0;
+            Mantissa = (ulong) Math.Abs(parsed);
+        }
+        public NativeValue(byte[] mantissa, int sign)
+        {
+            Mantissa = ParseMantissa(mantissa);
+            IsNegative = sign == -1;
+        }
+
+        public override string ToString()
+        {
+            var mantissa = Mantissa.ToString();
+            if (IsNegative)
+            {
+                return "-" + mantissa;
+            }
+            return mantissa;
+        }
+
+        public override byte[] ToBytes()
+        {
+            var notNegative = !IsNegative;
+            var mantissa = Bits.GetBytes(Mantissa);
+            mantissa[0] |= (byte) (notNegative ? 0x40 : 0x00);
+            return mantissa;
+        }
+    }
+
+    public class InvalidAmountValueException : Exception
+    {
+        public InvalidAmountValueException()
+        {
+        }
+
+        public InvalidAmountValueException(string message) : base(message)
+        {
+        }
+    }
+
+    public class PrecisionException : Exception
+    {
+        public PrecisionException()
+        {
+        }
+
+        public PrecisionException(string message) : base(message)
+        {
+        }
+    }
+}

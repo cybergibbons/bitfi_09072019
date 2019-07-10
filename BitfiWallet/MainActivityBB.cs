@@ -48,7 +48,7 @@ namespace BitfiWallet
         private void StartSplash()
         {
 
-            Task t = Task.Factory.StartNew(() =\>\
+            Task t = Task.Factory.StartNew(() =>
             {
 
 

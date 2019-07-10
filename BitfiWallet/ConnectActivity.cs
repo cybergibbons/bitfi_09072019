@@ -61,13 +61,13 @@ namespace BitfiWallet
         private Button mButtonQuote;
         private Button mButtonUnderS;
         private Button mButtonAT;
-        List\\ buttonLIst;
+        List<Button> buttonLIst;
         public string secr;
         public string kbstr;
         public bool capson;
         private void LoadBClicks()
         {
-            buttonLIst = new List\\();
+            buttonLIst = new List<Button>();
             mButton1 = (Button)FindViewById(Resource.Id.wbutton_1);
             mButton2 = (Button)FindViewById(Resource.Id.wbutton_2);
             mButton3 = (Button)FindViewById(Resource.Id.wbutton_3);
@@ -150,7 +150,7 @@ namespace BitfiWallet
             buttonLIst.Add(mButtonSemiC);
             buttonLIst.Add(mButtonAT);
             //  mButtonEnter = (Button)FindViewById(Resource.Id.wbutton_enter);
-            TextView tbsecr = FindViewById\\(Resource.Id.textviewPassword);
+            TextView tbsecr = FindViewById<TextView>(Resource.Id.textviewPassword);
             tbsecr.SetRawInputType(Android.Text.InputTypes.TextFlagNoSuggestions);
             kbstr = tbsecr.Text;
             tbsecr.SetBackgroundResource(Resource.Color.colorPrimary);
@@ -158,7 +158,7 @@ namespace BitfiWallet
             mButtonSpace = (Button)FindViewById(Resource.Id.wbutton_SPACE);
             mButtonSpace.Click += delegate
             {
-                if (kbstr.Length \>\ 0)
+                if (kbstr.Length > 0)
                 {
                     kbstr = kbstr + " ";
                     tbsecr.Text = kbstr;
@@ -168,7 +168,7 @@ namespace BitfiWallet
             mButtonDelete = (Button)FindViewById(Resource.Id.wbutton_delete);
             mButtonDelete.Click += delegate
             {
-                if (kbstr.Length \>\ 0)
+                if (kbstr.Length > 0)
                 {
                     kbstr = kbstr.Substring(0, kbstr.Length - 1);
                     tbsecr.Text = kbstr;
@@ -235,7 +235,8 @@ namespace BitfiWallet
             {
                 if (mButtonShift.Text == "^")
                 {
-                    mButtonShift.Text = "\                    mButtonA.Text = "~";
+                    mButtonShift.Text = "<";
+                    mButtonA.Text = "~";
                     mButtonB.Text = "-";
                     mButtonC.Text = "+";
                     mButtonD.Text = "=";
@@ -244,8 +245,9 @@ namespace BitfiWallet
                     mButtonG.Text = "[";
                     mButtonH.Text = "]";
                     mButtonI.Text = "/";
-                    mButtonJ.Text = "\>\";
-                    mButtonK.Text = "\                    mButtonL.Text = "?";
+                    mButtonJ.Text = ">";
+                    mButtonK.Text = "<";
+                    mButtonL.Text = "?";
                     mButtonM.Text = ".";
                     mButtonN.Text = ",";
                     mButtonO.Text = ")";
@@ -260,11 +262,11 @@ namespace BitfiWallet
                     mButtonX.Text = "*";
                     mButtonY.Text = ";";
                     mButtonZ.Text = "\"";
-                  //  mButtonCaps.Visibility = ViewStates.Gone;
+                    //  mButtonCaps.Visibility = ViewStates.Gone;
                     mButtonUnderS.Visibility = ViewStates.Visible;
                     mButtonQuote.Visibility = ViewStates.Visible;
                     mButtonSemiC.Visibility = ViewStates.Visible;
-                  //  forgetButton.Visibility = ViewStates.Gone;
+                    //  forgetButton.Visibility = ViewStates.Gone;
                     mButtonAT.Visibility = ViewStates.Visible;
                     mButtonSpace.Visibility = ViewStates.Gone;
                 }
@@ -308,8 +310,8 @@ namespace BitfiWallet
                             b.Text = b.Text.ToLower();
                         }
                     }
-                   // mButtonCaps.Visibility = ViewStates.Visible;
-                  //  forgetButton.Visibility = ViewStates.Visible;
+                    // mButtonCaps.Visibility = ViewStates.Visible;
+                    //  forgetButton.Visibility = ViewStates.Visible;
                     mButtonUnderS.Visibility = ViewStates.Gone;
                     mButtonQuote.Visibility = ViewStates.Gone;
                     mButtonSemiC.Visibility = ViewStates.Gone;

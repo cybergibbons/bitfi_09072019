@@ -10,7 +10,7 @@ namespace Ripple.Core.Types
     {
         public readonly AccountId Issuer;
         public readonly Currency Currency;
-        public bool IsNative =\>\ Currency.IsNative;
+        public bool IsNative => Currency.IsNative;
         public AmountValue Value;
 
         public const int MaximumIouPrecision = 16;
@@ -82,7 +82,7 @@ namespace Ripple.Core.Types
                     if (issuerToken == null)
                         throw new InvalidJsonException("Amount object must contain property `issuer`.");
 
-                    if (token.Children().Count() \>\ 3)
+                    if (token.Children().Count() > 3)
                         throw new InvalidJsonException("Amount object has too many properties.");
 
                     if(valueToken.Type != JTokenType.String)
@@ -131,9 +131,14 @@ namespace Ripple.Core.Types
                               a.Currency, a.Issuer);
         }
 
-        public static bool operator \\(decimal a, Amount b)
+        public static bool operator < (decimal a, Amount b)
         {
-            return a \>\ b.DecimalValue();
+            return a < b.DecimalValue();
+        }
+
+        public static bool operator >(decimal a, Amount b)
+        {
+            return a > b.DecimalValue();
         }
 
         public Amount NewValue(decimal @decimal)
