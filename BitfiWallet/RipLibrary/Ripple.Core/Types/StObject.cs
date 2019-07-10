@@ -11,11 +11,11 @@ namespace Ripple.Core.Types
 {
     public class StObject : ISerializedType
     {
-        protected internal readonly SortedDictionary\\ Fields;
+        protected internal readonly SortedDictionary<Field, ISerializedType> Fields;
 
         public StObject()
         {
-            Fields = new SortedDictionary\\();
+            Fields = new SortedDictionary<Field, ISerializedType>();
         }
 
         internal class BuildFrom
@@ -32,7 +32,7 @@ namespace Ripple.Core.Types
 
         static StObject()
         {
-            var d2 = new Dictionary\\
+            var d2 = new Dictionary<FieldType, BuildFrom>
             {
                 [FieldType.StObject] = new BuildFrom(FromJson, FromParser),
                 [FieldType.StArray] = new BuildFrom(StArray.FromJson, StArray.FromParser),
@@ -50,7 +50,7 @@ namespace Ripple.Core.Types
                 [FieldType.Vector256] = new BuildFrom(Vector256.FromJson, Vector256.FromParser),
             };
             foreach (var field in Field.Values.Where(
-                        field =\>\ d2.ContainsKey(field.Type)))
+                        field => d2.ContainsKey(field.Type)))
             {
                 var buildFrom = d2[field.Type];
                 field.FromJson = buildFrom.Json;
@@ -158,10 +158,10 @@ namespace Ripple.Core.Types
             return json;
         }
 
-        public void ToBytes(IBytesSink to, Func\\ p)
+        public void ToBytes(IBytesSink to, Func<Field, bool> p)
         {
             var serializer = new BinarySerializer(to);
-            foreach (var pair in Fields.Where(pair =\>\ pair.Key.IsSerialised &&
+            foreach (var pair in Fields.Where(pair => pair.Key.IsSerialised &&
                                                     (p == null || p(pair.Key))))
             {
                 serializer.Add(pair.Key, pair.Value);
@@ -187,14 +187,14 @@ namespace Ripple.Core.Types
         {
             var list = new BytesList();
             list.Put(HashPrefix.TxSign.Bytes());
-            ToBytes(list, f =\>\ f.IsSigningField);
+            ToBytes(list, f => f.IsSigningField);
             return list.Bytes();
         }
 
         public byte[] ToBytes()
         {
             var list = new BytesList();
-            ToBytes(list, f =\>\ f.IsSerialised);
+            ToBytes(list, f => f.IsSerialised);
             return list.Bytes();
         }
         public AccountId this[AccountIdField f]

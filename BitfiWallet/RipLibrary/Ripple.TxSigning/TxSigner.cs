@@ -26,12 +26,12 @@ namespace Ripple.TxSigning
         {
         }
 
-        /// \\
+        /// <summary>
         /// 
-        /// \\
-        /// \\\\
-        /// \\\\
-        /// \\Thrown when provided Json transaction is not valid.\\
+        /// </summary>
+        /// <param name="tx"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidTxException">Thrown when provided Json transaction is not valid.</exception>
         public SignedTx SignJson(JObject tx)
         {
             StObject so;

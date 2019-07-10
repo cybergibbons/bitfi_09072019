@@ -10,7 +10,7 @@ namespace Ripple.Core.ShaMapTree
         public Hash256 Index;
         public ShaMapLeaf Leaf;
 
-        private LinkedList\\ _inners;
+        private LinkedList<ShaMapInner> _inners;
         private ShaMapInner[] _dirtied;
         private bool _matched;
 
@@ -45,7 +45,7 @@ namespace Ripple.Core.ShaMapTree
                 var ix = 0;
                 // We want to make a uniformly accessed array of the inners
                 _dirtied = new ShaMapInner[_inners.Count];
-                IEnumerator\\ it = _inners.GetEnumerator();
+                IEnumerator<ShaMapInner> it = _inners.GetEnumerator();
                 var top = it.Current;
                 _dirtied[ix++] = top;
                 top.Invalidate();
@@ -85,7 +85,7 @@ namespace Ripple.Core.ShaMapTree
             Debug.Assert(_dirtied != null);
             ShaMapLeaf onlyChild = null;
 
-            for (var i = _dirtied.Length - 1; i \>\= 0; i--)
+            for (var i = _dirtied.Length - 1; i >= 0; i--)
             {
                 var next = _dirtied[i];
                 if (onlyChild != null)
@@ -104,7 +104,7 @@ namespace Ripple.Core.ShaMapTree
         {
             var ix = 0;
             _dirtied = new ShaMapInner[_inners.Count];
-            IEnumerator\\ descending = _inners.GetEnumerator();
+            IEnumerator<ShaMapInner> descending = _inners.GetEnumerator();
             while (descending.MoveNext())
             {
                 ShaMapInner next = descending.Current;
@@ -126,7 +126,7 @@ namespace Ripple.Core.ShaMapTree
 
         private void MakeStack(ShaMapInner root, Hash256 index)
         {
-            _inners = new LinkedList\\();
+            _inners = new LinkedList<ShaMapInner>();
             var top = root;
 
             while (true)

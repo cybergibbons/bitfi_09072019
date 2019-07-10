@@ -6,7 +6,7 @@ using Ripple.Core.Util;
 
 namespace Ripple.Core.Enums
 {
-    public abstract class SerializedEnumItem\\ : EnumItem, ISerializedType
+    public abstract class SerializedEnumItem<TOrd> : EnumItem, ISerializedType
         where TOrd : struct, IConvertible
     {
         protected readonly byte[] Bytes; 

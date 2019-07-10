@@ -45,10 +45,10 @@ namespace NoxMsgConsole
                 {
                     System.IO.StreamReader sr = new System.IO.StreamReader(stream);
                     var result = sr.ReadToEnd();
-                    return JsonConvert.DeserializeObject\\(result);
+                    return JsonConvert.DeserializeObject<TxnResponse>(result);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TxnResponse txnResponse = new TxnResponse();
                 txnResponse.success = false;
@@ -58,4 +58,3 @@ namespace NoxMsgConsole
         }
     }
 }
-

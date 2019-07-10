@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace EthereumLibrary.RLP
 {
-  public class RLPCollection : List\\, IRLPElement
+  public class RLPCollection : List<IRLPElement>, IRLPElement
   {
     public byte[] RLPData { get; set; }
   }

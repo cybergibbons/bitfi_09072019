@@ -80,13 +80,13 @@ namespace Ripple.Core.Types
             return hop;
         }
     }
-    public class Path : List\\
+    public class Path : List<PathHop>
     {
         public Path()
         {
         }
 
-        public Path(IEnumerable\\ enumerable) : base(enumerable)
+        public Path(IEnumerable<PathHop> enumerable) : base(enumerable)
         {
         }
         public static Path FromJson(JToken json)
@@ -104,7 +104,7 @@ namespace Ripple.Core.Types
         }
     }
 
-    public class PathSet : List\\, ISerializedType
+    public class PathSet : List<Path>, ISerializedType
     {
         public static byte PathSeparatorByte = 0xFF;
         public static byte PathsetEndByte = 0x00;
@@ -114,7 +114,7 @@ namespace Ripple.Core.Types
             
         }
 
-        public PathSet(IEnumerable\\ collection) : base(collection)
+        public PathSet(IEnumerable<Path> collection) : base(collection)
         {
         }
 

@@ -14,4 +14,7 @@ namespace Chaos.NaCl.Internal.Ed25519Ref10
 			FieldOperations.fe_mul(out x, ref h.X, ref recip);
 			FieldOperations.fe_mul(out y, ref h.Y, ref recip);
 			FieldOperations.fe_tobytes(s, offset, ref y);
-			s[offset + 31] ^= (byte)(FieldOperations.fe_isnegative(ref x) \
+			s[offset + 31] ^= (byte)(FieldOperations.fe_isnegative(ref x) << 7);
+		}
+	}
+}

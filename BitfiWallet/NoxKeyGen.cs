@@ -12,14 +12,16 @@ namespace NoxKeys
         private ExtKey GetExtKey(int[] SecretSalt, int[] SecretPW)
         {
             byte[] ssalt = new byte[SecretSalt.Length];
-            for (int i = 0; i \            {
-                 ssalt[i] = Sclear.SCharImage(SecretSalt[i]).SBYTE;
-                 SecretSalt[i] = -1;
+            for (int i = 0; i < SecretSalt.Length; i++)
+            {
+                ssalt[i] = Sclear.SCharImage(SecretSalt[i]).SBYTE;
+                SecretSalt[i] = -1;
             }
             byte[] spw = new byte[SecretPW.Length];
-            for (int i = 0; i \            {
+            for (int i = 0; i < SecretPW.Length; i++)
+            {
                 spw[i] = Sclear.SCharImage(SecretPW[i]).SBYTE;
-                 SecretPW[i] = -1;
+                SecretPW[i] = -1;
             }
             byte[] der = NBitcoin.Crypto.SCrypt.ComputeDerivedKey(spw, ssalt, 32768, 8, 4, 4, 64);
             if (der == null)
@@ -56,11 +58,13 @@ namespace NoxKeys
         internal string GetTestHash(int[] SecretSalt, int[] SecretPW)
         {
             byte[] ssalt = new byte[SecretSalt.Length];
-            for (int i = 0; i \            {
+            for (int i = 0; i < SecretSalt.Length; i++)
+            {
                 ssalt[i] = Sclear.SCharImage(SecretSalt[i]).SBYTE;
             }
             byte[] spw = new byte[SecretPW.Length];
-            for (int i = 0; i \            {
+            for (int i = 0; i < SecretPW.Length; i++)
+            {
 
                 spw[i] = Sclear.SCharImage(SecretPW[i]).SBYTE;
             }
@@ -152,7 +156,7 @@ namespace NoxKeys
                 Sclear.EraseBytes(keybytes);
                 return msgTaskTransferResponse;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 msgTaskTransferResponse.Error = ex.Message;
                 return msgTaskTransferResponse;
@@ -290,10 +294,11 @@ namespace NoxKeys
                 key = null;
                 pkey = null;
                 NWS WS = new NWS();
-                List\\ lnoxAddresses = new List\\();
+                List<BitfiWallet.NOXWS.NoxAddresses> lnoxAddresses = new List<BitfiWallet.NOXWS.NoxAddresses>();
                 string adrlist = JsonConvert.SerializeObject(lnoxAddresses);
                 string tkmsg = WS.GetSGAToken(address, signature);
-                if (tkmsg.Length \                {
+                if (tkmsg.Length < 10)
+                {
                     return new string[2] { tkmsg, adrlist };
                 }
 
@@ -425,9 +430,9 @@ namespace NoxKeys
             NEOkeypair.Dispose();
             return neoaddress;
         }
-        internal List\\ GetReviewIndexes(BitfiWallet.SGADWS.NoxAddressReviewV3 noxAddressReviews, ExtKey masterKey)
+        internal List<BitfiWallet.NOXWS.NoxAddresses> GetReviewIndexes(BitfiWallet.SGADWS.NoxAddressReviewV3 noxAddressReviews, ExtKey masterKey)
         {
-            List\\ noxAddresses = new List\\();
+            List<BitfiWallet.NOXWS.NoxAddresses> noxAddresses = new List<BitfiWallet.NOXWS.NoxAddresses>();
 
             foreach (var adrReview in noxAddressReviews.AdrReview)
             {
@@ -435,7 +440,8 @@ namespace NoxKeys
                 ExtKey ASmasterKey = masterKey.Derive(GetCurrencyIndex(currencySymbol), hardened: true);
 
 
-                for (int i = 0; i \                {
+                for (int i = 0; i < adrReview.IndexCount; i++)
+                {
 
                     string address = "";
                     ExtKey key = ASmasterKey.Derive((uint)i);
@@ -444,7 +450,7 @@ namespace NoxKeys
                     if (GetBLKNetworkAlt(adrReview.Blk) != null)
                     {
 
-                        foreach(var nadr in noxAddressReviews.Addresses)
+                        foreach (var nadr in noxAddressReviews.Addresses)
                         {
                             if (nadr.BlkNet == adrReview.Blk && nadr.HDIndex == i)
                             {
@@ -459,11 +465,11 @@ namespace NoxKeys
                     if (adrReview.Blk == "apl")
                     {
                         APLGen aPL = new APLGen();
-                        address =  aPL.GetAccountID(keybytes);
+                        address = aPL.GetAccountID(keybytes);
                     }
                     if (adrReview.Blk == "neo")
                     {
-                         var NEOkeypair = new KeyPair(keybytes);
+                        var NEOkeypair = new KeyPair(keybytes);
                         address = NEOkeypair.address;
                         NEOkeypair.Dispose();
                     }
@@ -487,7 +493,7 @@ namespace NoxKeys
                     Sclear.EraseBytes(keybytes);
                     key = null;
 
-                    noxAddresses.Add(new BitfiWallet.NOXWS.NoxAddresses { BlkNet = currencySymbol, BTCAddress = address}
+                    noxAddresses.Add(new BitfiWallet.NOXWS.NoxAddresses { BlkNet = currencySymbol, BTCAddress = address }
 
                     );
 
@@ -504,7 +510,7 @@ namespace NoxKeys
             ExtKey masterKey = GetExtKey(SecretSalt, SecretPW);
             adrCollection.BTC = GetFirstBTC(masterKey);
             adrCollection.LTC = GetFirstLTC(masterKey);
-            adrCollection.ETH = GetFirstETH(masterKey);        
+            adrCollection.ETH = GetFirstETH(masterKey);
             adrCollection.NEO = GetFirstNEO(masterKey);
             adrCollection.XMR = GetFirstXMR(masterKey);
             masterKey = null;
@@ -519,12 +525,13 @@ namespace NoxKeys
             {
                 byte[] bts = Convert.FromBase64String(MXTxn);
                 string jData = System.Text.Encoding.UTF8.GetString(bts);
-                NEONeoscanUnspent[] unspent = JsonConvert.DeserializeObject\\(jData);
-                if (unspent == null || unspent.Length \                {
+                NEONeoscanUnspent[] unspent = JsonConvert.DeserializeObject<NEONeoscanUnspent[]>(jData);
+                if (unspent == null || unspent.Length < 1)
+                {
                     taskTransferResponse.Error = "No unspent.";
                     return taskTransferResponse;
                 }
-                List\\ entries = new List\\();
+                List<NeoGasLibrary.NeoAPI.UnspentEntry> entries = new List<NeoGasLibrary.NeoAPI.UnspentEntry>();
                 foreach (var un in unspent)
                 {
                     NeoGasLibrary.NeoAPI.UnspentEntry entry = new NeoGasLibrary.NeoAPI.UnspentEntry();
@@ -533,7 +540,8 @@ namespace NoxKeys
                     entry.value = un.value;
                     entries.Add(entry);
                 }
-                if (entries == null || entries.Count \                {
+                if (entries == null || entries.Count < 1)
+                {
                     taskTransferResponse.Error = "No Entries.";
                     return taskTransferResponse;
                 }
@@ -614,7 +622,7 @@ namespace NoxKeys
                 var amount = NumUtils.Utils.ParseMoney(tproc.Amount, 18);
                 var nonce = System.Numerics.BigInteger.Parse(tproc.ETCNonce);
                 var gasPrice = NumUtils.Utils.ParseMoney(tproc.FeeValue, 18);
-                var gasLimit =  new System.Numerics.BigInteger(Int64.Parse(tproc.ETCGasUsed));
+                var gasLimit = new System.Numerics.BigInteger(Int64.Parse(tproc.ETCGasUsed));
                 var tx = new EthereumLibrary.Signer.Transaction(contractAddress, to, amount, nonce, gasPrice, gasLimit);
                 tx.Sign(key);
                 var signedHex = tx.ToHex();
@@ -625,10 +633,10 @@ namespace NoxKeys
             else
             {
                 var to = tproc.ToAddress.EnsureHexPrefix();
-                 var amount = NumUtils.Utils.ParseMoney(tproc.Amount, 18);
-                 var nonce = System.Numerics.BigInteger.Parse(tproc.ETCNonce);
-                 var gasPrice = NumUtils.Utils.ParseMoney(tproc.FeeValue, 18);
-                 var gasLimit = new System.Numerics.BigInteger(Int64.Parse(tproc.ETCGasUsed));
+                var amount = NumUtils.Utils.ParseMoney(tproc.Amount, 18);
+                var nonce = System.Numerics.BigInteger.Parse(tproc.ETCNonce);
+                var gasPrice = NumUtils.Utils.ParseMoney(tproc.FeeValue, 18);
+                var gasLimit = new System.Numerics.BigInteger(Int64.Parse(tproc.ETCGasUsed));
 
                 var tx = new EthereumLibrary.Signer.Transaction(to, amount, nonce, gasPrice, gasLimit);
                 tx.Sign(key);
@@ -645,8 +653,9 @@ namespace NoxKeys
             masterKey = masterKey.Derive(GetCurrencyIndex(currencySymbol), hardened: true);
 
             var HDIndexes = tproc.HDIndexList;
-            List\\ kbList = new List\\();
-            for (int i = 0; i \            {
+            List<byte[]> kbList = new List<byte[]>();
+            for (int i = 0; i < HDIndexes.Length; i++)
+            {
                 int HDIndex = Convert.ToInt32(HDIndexes[i]);
                 ExtKey key = masterKey.Derive((uint)HDIndex);
                 kbList.Add(key.PrivateKey.ToBytes());
@@ -654,7 +663,7 @@ namespace NoxKeys
             }
             masterKey = null;
             BitfiWallet.AltCoinGen altCoinGen = new BitfiWallet.AltCoinGen(GetBLKNetworkAlt(currencySymbol));
-            List\\ txnRaw = new List\\();
+            List<BCUnspent> txnRaw = new List<BCUnspent>();
             foreach (var txnin in tproc.UnspentList)
             {
                 BCUnspent bCUnspent = new BCUnspent();
@@ -673,13 +682,13 @@ namespace NoxKeys
                     decimal FeeUSD = tproc.USDRate * txn.Fee;
                     taskTransferResponse.TxnHex = txn.TxnHex;
                     taskTransferResponse.FeeAmount = txn.Fee.ToString();
-                    if (FeeUSD \>\ .0099M)
+                    if (FeeUSD > .0099M)
                     {
-                        taskTransferResponse.FeeAmount = taskTransferResponse.FeeAmount + "|\>\" + FeeUSD.ToString("C2");
+                        taskTransferResponse.FeeAmount = taskTransferResponse.FeeAmount + "|>" + FeeUSD.ToString("C2");
                     }
 
-                    if (FeeUSD \>\ 4) taskTransferResponse.FeeWarning = "HIGH FEE ALERT!";
-                    if (txn.Fee \>\ (Convert.ToDecimal(tproc.Amount) * .04M))
+                    if (FeeUSD > 4) taskTransferResponse.FeeWarning = "HIGH FEE ALERT!";
+                    if (txn.Fee > (Convert.ToDecimal(tproc.Amount) * .04M))
                     {
                         decimal feePer = (txn.Fee / Convert.ToDecimal(tproc.Amount)) * 100;
                         taskTransferResponse.FeeWarning = "CHECK FEE! CHARGE IS " + feePer.ToString("N2") + "% OF PAYMENT.";
@@ -700,7 +709,7 @@ namespace NoxKeys
             {
                 taskTransferResponse.Error = ex.Message;
                 return taskTransferResponse;
-            }     
+            }
         }
         internal RipTaskTransferResponse Rip_Sign(int[] SecretSalt, int[] SecretPW, BitfiWallet.NOXWS.NoxTxnProcess tproc)
         {
@@ -721,9 +730,9 @@ namespace NoxKeys
             ser.NullValueHandling = NullValueHandling.Ignore;
             ser.ObjectCreationHandling = ObjectCreationHandling.Auto;
             ser.TypeNameHandling = TypeNameHandling.All;
-            var data = JsonConvert.DeserializeObject\\(MXTxn, ser);
+            var data = JsonConvert.DeserializeObject<RipTxnModel>(MXTxn, ser);
             var chamount = Convert.ToDecimal(data.Amount) * 0.000001M;
-            if (chamount \>\ Convert.ToDecimal(tproc.Amount))
+            if (chamount > Convert.ToDecimal(tproc.Amount))
             {
                 Sclear.EraseBytes(keybytes);
                 taskTransferResponse.Error = "Error parsing amount.";
@@ -786,7 +795,7 @@ namespace NoxKeys
                 ser.NullValueHandling = NullValueHandling.Ignore;
                 ser.ObjectCreationHandling = ObjectCreationHandling.Auto;
                 ser.TypeNameHandling = TypeNameHandling.All;
-                var data = JsonConvert.DeserializeObject\\(jData, ser);
+                var data = JsonConvert.DeserializeObject<MoneroWallet.LedgerData>(jData, ser);
                 var wlt = MoneroWallet.Wallet.OpenWallet(keybytes);
                 Sclear.EraseBytes(keybytes);
                 if (wlt.Address != FromAddress)
@@ -818,7 +827,7 @@ namespace NoxKeys
             NEOTaskTransferResponse taskTransferResponse = new NEOTaskTransferResponse();
             byte[] bts = Convert.FromBase64String(req.NXTxn);
             string jData = System.Text.Encoding.UTF8.GetString(bts);
-            NEONeoscanUnclaimed unclaimed = JsonConvert.DeserializeObject\\(jData);
+            NEONeoscanUnclaimed unclaimed = JsonConvert.DeserializeObject<NEONeoscanUnclaimed>(jData);
             if (unclaimed == null)
             {
                 taskTransferResponse.Error = "Error, no claimable values.";
@@ -829,7 +838,7 @@ namespace NoxKeys
                 taskTransferResponse.Error = "Error, no claimable values.";
                 return taskTransferResponse;
             }
-            List\\ claims = new List\\();
+            List<NeoGasLibrary.NeoAPI.ClaimEntry> claims = new List<NeoGasLibrary.NeoAPI.ClaimEntry>();
             foreach (var un in unclaimed.claimable)
             {
                 NeoGasLibrary.NeoAPI.ClaimEntry entry = new NeoGasLibrary.NeoAPI.ClaimEntry();
@@ -838,7 +847,8 @@ namespace NoxKeys
                 entry.value = un.unclaimed;
                 claims.Add(entry);
             }
-            if (claims.Count \            {
+            if (claims.Count < 1)
+            {
                 taskTransferResponse.Error = "Error, no claimable values.";
                 return taskTransferResponse;
             }
@@ -868,7 +878,7 @@ namespace NoxKeys
         public int OutputN { get; set; }
         public string Address { get; set; }
     }
-   // [Android.Runtime.Preserve(AllMembers = true)]
+    // [Android.Runtime.Preserve(AllMembers = true)]
     internal class AdrCollection
     {
         public string BTC { get; set; }
@@ -891,21 +901,21 @@ namespace NoxKeys
         public string TxnHex { get; set; }
         public string Amount { get; set; }
     }
-  //  [Android.Runtime.Preserve(AllMembers = true)]
+    //  [Android.Runtime.Preserve(AllMembers = true)]
     internal class XMRTaskTransferResponse
     {
         public string Error { get; set; }
         public string TxnHex { get; set; }
         public string[] SpendKeyImages { get; set; }
     }
-   // [Android.Runtime.Preserve(AllMembers = true)]
+    // [Android.Runtime.Preserve(AllMembers = true)]
     internal class XMRTaskImageResponse
     {
         public string Error { get; set; }
         public string WalletAddress { get; set; }
         public string[] SpendKeyImages { get; set; }
     }
-  //  [Android.Runtime.Preserve(AllMembers = true)]
+    //  [Android.Runtime.Preserve(AllMembers = true)]
     internal class RipTaskTransferResponse
     {
         public string Error { get; set; }
@@ -922,19 +932,19 @@ namespace NoxKeys
         public string Error { get; set; }
         public string TxnHex { get; set; }
     }
-   /// [Android.Runtime.Preserve(AllMembers = true)]
+    /// [Android.Runtime.Preserve(AllMembers = true)]
     internal class NEOTaskTransferResponse
     {
         public string Error { get; set; }
         public string TxnHex { get; set; }
     }
-   // [Android.Runtime.Preserve(AllMembers = true)]
+    // [Android.Runtime.Preserve(AllMembers = true)]
     internal class ETHTaskTransferResponse
     {
         public string Error { get; set; }
         public string TxnHex { get; set; }
     }
- //   [Android.Runtime.Preserve(AllMembers = true)]
+    //   [Android.Runtime.Preserve(AllMembers = true)]
     internal class AltoCoinTaskTransferResponse
     {
         public string Error { get; set; }
@@ -942,19 +952,19 @@ namespace NoxKeys
         public string FeeWarning { get; set; }
         public string TxnHex { get; set; }
     }
-  //  [Android.Runtime.Preserve(AllMembers = true)]
+    //  [Android.Runtime.Preserve(AllMembers = true)]
     internal class NEONeoscanUnspent
     {
         public string txid { get; set; }
         public decimal value { get; set; }
         public int n { get; set; }
     }
- //   [Android.Runtime.Preserve(AllMembers = true)]
+    //   [Android.Runtime.Preserve(AllMembers = true)]
     internal class NEONeoscanUnclaimed
     {
         public NEONeoscanClaimable[] claimable { get; set; }
     }
-   // [Android.Runtime.Preserve(AllMembers = true)]
+    // [Android.Runtime.Preserve(AllMembers = true)]
     internal class NEONeoscanClaimable
     {
         public string txid { get; set; }
@@ -962,4 +972,3 @@ namespace NoxKeys
         public int n { get; set; }
     }
 }
-

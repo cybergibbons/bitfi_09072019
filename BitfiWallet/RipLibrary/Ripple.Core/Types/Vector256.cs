@@ -5,9 +5,9 @@ using Ripple.Core.Binary;
 
 namespace Ripple.Core.Types
 {
-    public class Vector256 : List\\, ISerializedType
+    public class Vector256 : List<Hash256>, ISerializedType
     {
-        private Vector256(IEnumerable\\ enumerable) : base (enumerable) {}
+        private Vector256(IEnumerable<Hash256> enumerable) : base (enumerable) {}
 
         public Vector256()
         {
@@ -43,4 +43,11 @@ namespace Ripple.Core.Types
             {
                 hint = parser.Size - parser.Pos();
             }
-            for (int i = 0; i \
+            for (int i = 0; i < hint / 32; i++)
+            {
+                vec.Add(Hash256.FromParser(parser));
+            }
+            return vec;
+        }
+    }
+}

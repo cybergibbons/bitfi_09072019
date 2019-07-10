@@ -4,7 +4,7 @@ using Ripple.Core.Util;
 
 namespace Ripple.Core.Types
 {
-    public class Uint16 : Uint\\
+    public class Uint16 : Uint<ushort>
     {
         public Uint16(ushort value) : base(value)
         {

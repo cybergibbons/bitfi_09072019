@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 namespace ECLibrary.RLP
 {
-  public interface IRLPElement
-  {
-    byte[] RLPData { get; }
-  }
+    public interface IRLPElement
+    {
+        byte[] RLPData { get; }
+    }
 }
-

@@ -21,7 +21,7 @@ namespace Chaos.NaCl
             if (privateKey.Length != PrivateKeySizeInBytes)
                 throw new ArgumentException("privateKey.Length must be 32");
             var publicKey = new byte[32];
-            GetPublicKey(new ArraySegment\\(publicKey), new ArraySegment\\(privateKey));
+            GetPublicKey(new ArraySegment<byte>(publicKey), new ArraySegment<byte>(privateKey));
             return publicKey;
         }
 
@@ -33,7 +33,7 @@ namespace Chaos.NaCl
 			0, 0, 0 ,0, 0, 0, 0, 0
 		};
 
-        public static void GetPublicKey(ArraySegment\\ publicKey, ArraySegment\\ privateKey)
+        public static void GetPublicKey(ArraySegment<byte> publicKey, ArraySegment<byte> privateKey)
         {
             if (publicKey.Array == null)
                 throw new ArgumentNullException("publicKey.Array");
@@ -46,7 +46,29 @@ namespace Chaos.NaCl
 
             // hack: abusing publicKey as temporary storage
             // todo: remove hack
-            for (int i = 0; i \\ salsaState;
+            for (int i = 0; i < 32; i++)
+            {
+                publicKey.Array[publicKey.Offset + i] = privateKey.Array[privateKey.Offset + i];
+            }
+            ScalarOperations.sc_clamp(publicKey.Array, publicKey.Offset);
+
+            GroupElementP3 A;
+            GroupOperations.ge_scalarmult_base(out A, publicKey.Array, publicKey.Offset);
+            FieldElement publicKeyFE;
+            EdwardsToMontgomeryX(out publicKeyFE, ref A.Y, ref A.Z);
+            FieldOperations.fe_tobytes(publicKey.Array, publicKey.Offset, ref publicKeyFE);
+        }
+
+        // hashes like the Curve25519 paper says
+        internal static void KeyExchangeOutputHashCurve25519Paper(byte[] sharedKey, int offset)
+        {
+            //c = Curve25519output
+            const UInt32 c0 = 'C' | 'u' << 8 | 'r' << 16 | (UInt32)'v' << 24;
+            const UInt32 c1 = 'e' | '2' << 8 | '5' << 16 | (UInt32)'5' << 24;
+            const UInt32 c2 = '1' | '9' << 8 | 'o' << 16 | (UInt32)'u' << 24;
+            const UInt32 c3 = 't' | 'p' << 8 | 'u' << 16 | (UInt32)'t' << 24;
+
+            Array16<UInt32> salsaState;
             salsaState.x0 = c0;
             salsaState.x1 = ByteIntegerConverter.LoadLittleEndian32(sharedKey, offset + 0);
             salsaState.x2 = 0;
@@ -86,11 +108,11 @@ namespace Chaos.NaCl
         public static byte[] KeyExchange(byte[] publicKey, byte[] privateKey)
         {
             var sharedKey = new byte[SharedKeySizeInBytes];
-            KeyExchange(new ArraySegment\\(sharedKey), new ArraySegment\\(publicKey), new ArraySegment\\(privateKey));
+            KeyExchange(new ArraySegment<byte>(sharedKey), new ArraySegment<byte>(publicKey), new ArraySegment<byte>(privateKey));
             return sharedKey;
         }
 
-        public static void KeyExchange(ArraySegment\\ sharedKey, ArraySegment\\ publicKey, ArraySegment\\ privateKey)
+        public static void KeyExchange(ArraySegment<byte> sharedKey, ArraySegment<byte> publicKey, ArraySegment<byte> privateKey)
         {
             if (sharedKey.Array == null)
                 throw new ArgumentNullException("sharedKey.Array");

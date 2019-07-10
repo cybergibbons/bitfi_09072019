@@ -17,7 +17,7 @@ namespace BitfiWallet
 {
     [Activity(Label = "", Name = "my.NoxViewModel", Theme = "@style/FullscreenTheme", ExcludeFromRecents = true)]
     public class NoxViewModel : ListActivity
-    { 
+    {
         public static string action;
         public static string token;
         public static string addresses;
@@ -34,14 +34,14 @@ namespace BitfiWallet
             {
 
 
-            xbw.DoWork += new DoWorkEventHandler(xbw_DoWork);
-            xbw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(xbw_RunWorkerCompleted);
-            if (string.IsNullOrEmpty(action)) action = Intent.GetStringExtra("action");
-            token = Intent.GetStringExtra("token");
-            if (action == "accounts")
-            {
-                addresses = Intent.GetStringExtra("adrlist");
-            }
+                xbw.DoWork += new DoWorkEventHandler(xbw_DoWork);
+                xbw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(xbw_RunWorkerCompleted);
+                if (string.IsNullOrEmpty(action)) action = Intent.GetStringExtra("action");
+                token = Intent.GetStringExtra("token");
+                if (action == "accounts")
+                {
+                    addresses = Intent.GetStringExtra("adrlist");
+                }
                 RequestWindowFeature(WindowFeatures.NoTitle);
                 SetContentView(Resource.Layout.viewmodel_maina);
                 activity = this;
@@ -60,7 +60,7 @@ namespace BitfiWallet
                 e.Result = 0;
                 filtered = new SGADWS.WalletList[0];
                 NWSfiltered = new BitfiWallet.NOXWS.NoxAddresses[0];
-                FindViewById\\(Resource.Id.linlaHeaderProgress).Visibility = ViewStates.Visible;
+                FindViewById<LinearLayout>(Resource.Id.linlaHeaderProgress).Visibility = ViewStates.Visible;
                 pb = (ProgressBar)FindViewById(Resource.Id.progressBar);
                 pb.Indeterminate = true;
                 pb.Max = 100;
@@ -70,10 +70,10 @@ namespace BitfiWallet
                 {
                     try
                     {
-                        NWSfiltered = JsonConvert.DeserializeObject\\(addresses);
-                        if (NWSfiltered != null && NWSfiltered.Length \>\ 1)
+                        NWSfiltered = JsonConvert.DeserializeObject<BitfiWallet.NOXWS.NoxAddresses[]>(addresses);
+                        if (NWSfiltered != null && NWSfiltered.Length > 1)
                         {
-                            List\\ lnoxAddresses = new List\\();
+                            List<BitfiWallet.NOXWS.NoxAddresses> lnoxAddresses = new List<BitfiWallet.NOXWS.NoxAddresses>();
                             BitfiWallet.NOXWS.NoxAddresses noxAddr = new NOXWS.NoxAddresses();
                             noxAddr.ViewKey = "Click on address to display QR code.";
                             noxAddr.BlkNet = "";
@@ -121,11 +121,11 @@ namespace BitfiWallet
         private void xbw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             pb.Indeterminate = false;
-            pb.Max= 100;
+            pb.Max = 100;
             pb.SetProgress(100, true);
-            FindViewById\\(Resource.Id.linlaHeaderProgress).Visibility = ViewStates.Gone;
+            FindViewById<LinearLayout>(Resource.Id.linlaHeaderProgress).Visibility = ViewStates.Gone;
             ListAdapter = new ViewListAdapter(this);
-            if ((int) e.Result == 1)
+            if ((int)e.Result == 1)
             {
                 DisplayMSG("Network error, please check connection.");
                 return;
@@ -145,11 +145,11 @@ namespace BitfiWallet
         }
         public override void OnBackPressed()
         {
-            AlertDialog.Builder tbuilder = new AlertDialog.Builder(this).SetTitle("").SetMessage("Exit now?").SetCancelable(true).SetNegativeButton("NO", (EventHandler\\)null).SetPositiveButton("YES", (EventHandler\\)null);
+            AlertDialog.Builder tbuilder = new AlertDialog.Builder(this).SetTitle("").SetMessage("Exit now?").SetCancelable(true).SetNegativeButton("NO", (EventHandler<DialogClickEventArgs>)null).SetPositiveButton("YES", (EventHandler<DialogClickEventArgs>)null);
             AlertDialog talert = tbuilder.Create();
             talert.Show();
             var okBtn = talert.GetButton((int)DialogButtonType.Positive);
-            okBtn.Click += (asender, args) =\>\
+            okBtn.Click += (asender, args) =>
             {
                 talert.Dismiss();
                 NoxDispose();
@@ -162,11 +162,11 @@ namespace BitfiWallet
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this).SetTitle("")
                 .SetMessage(msg).SetCancelable(false)
-                .SetPositiveButton("Ok", (EventHandler\\)null);
+                .SetPositiveButton("Ok", (EventHandler<DialogClickEventArgs>)null);
             AlertDialog alert = builder.Create();
             alert.Show();
             var okBtn = alert.GetButton((int)DialogButtonType.Positive);
-            okBtn.Click += (asender, args) =\>\
+            okBtn.Click += (asender, args) =>
             {
 
                 alert.Dismiss();
@@ -182,8 +182,8 @@ namespace BitfiWallet
                 addresses = null;
                 token = null;
                 action = null;
-               xbw.DoWork -= new DoWorkEventHandler(xbw_DoWork);
-               xbw.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(xbw_RunWorkerCompleted);
+                xbw.DoWork -= new DoWorkEventHandler(xbw_DoWork);
+                xbw.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(xbw_RunWorkerCompleted);
 
 
                 NWSfiltered = null;
@@ -196,11 +196,11 @@ namespace BitfiWallet
         }
         class ViewListAdapter : BaseAdapter
         {
-            Context context;     
+            Context context;
             public ViewListAdapter(Context c)
             {
                 context = c;
-            } 
+            }
             public override Java.Lang.Object GetItem(int position)
             {
                 return null;
@@ -245,44 +245,44 @@ namespace BitfiWallet
                 {
 
                     convertView = LayoutInflater.From(context).Inflate(Resource.Layout.overview, parent, false);
-                  //  convertView.FindViewById\\(Resource.Id.ovt1).Typeface = typeface;
-                  //  convertView.FindViewById\\(Resource.Id.ovt1b).Typeface = typeface;
-                    convertView.FindViewById\\(Resource.Id.ovt2).Typeface = typeface;
-                    convertView.FindViewById\\(Resource.Id.ovt3).Typeface = typeface;
+                    //  convertView.FindViewById<TextView>(Resource.Id.ovt1).Typeface = typeface;
+                    //  convertView.FindViewById<TextView>(Resource.Id.ovt1b).Typeface = typeface;
+                    convertView.FindViewById<TextView>(Resource.Id.ovt2).Typeface = typeface;
+                    convertView.FindViewById<TextView>(Resource.Id.ovt3).Typeface = typeface;
                     if (action == "overview" && filtered != null)
                     {
 
-                        TextView tv1 = convertView.FindViewById\\(Resource.Id.ovt1);
+                        TextView tv1 = convertView.FindViewById<TextView>(Resource.Id.ovt1);
                         tv1.Text = filtered[position].Currency;
-                        convertView.FindViewById\\(Resource.Id.ovt2).Text = filtered[position].Balance;
-                        convertView.FindViewById\\(Resource.Id.ovt3).Text = filtered[position].USD;
-                        convertView.FindViewById\\(Resource.Id.ovt1b).Visibility = ViewStates.Gone;
-                        convertView.FindViewById\\(Resource.Id.ovt2).Visibility = ViewStates.Visible;
-                        convertView.FindViewById\\(Resource.Id.ovt3).Visibility = ViewStates.Visible;
+                        convertView.FindViewById<TextView>(Resource.Id.ovt2).Text = filtered[position].Balance;
+                        convertView.FindViewById<TextView>(Resource.Id.ovt3).Text = filtered[position].USD;
+                        convertView.FindViewById<TextView>(Resource.Id.ovt1b).Visibility = ViewStates.Gone;
+                        convertView.FindViewById<TextView>(Resource.Id.ovt2).Visibility = ViewStates.Visible;
+                        convertView.FindViewById<TextView>(Resource.Id.ovt3).Visibility = ViewStates.Visible;
                         if (position == 0)
                         {
-              //              convertView.FindViewById\\(Resource.Id.ovt1b).SetTextColor(new Color(Resource.Color.black_overlay));
-                            convertView.FindViewById\\(Resource.Id.ovt1b).Text = "[refresh]";
-                            convertView.FindViewById\\(Resource.Id.ovt1b).SetTypeface(Typeface.Monospace, TypefaceStyle.Italic);
-                            convertView.FindViewById\\(Resource.Id.ovt1b).SetTextSize(Android.Util.ComplexUnitType.Sp, 13);
-                            convertView.FindViewById\\(Resource.Id.ovt1b).Visibility = ViewStates.Visible;
-                            convertView.FindViewById\\(Resource.Id.ovt3).Visibility = ViewStates.Gone;
-                            convertView.FindViewById\\(Resource.Id.ovt2).Visibility = ViewStates.Gone;
+                            //              convertView.FindViewById<TextView>(Resource.Id.ovt1b).SetTextColor(new Color(Resource.Color.black_overlay));
+                            convertView.FindViewById<TextView>(Resource.Id.ovt1b).Text = "[refresh]";
+                            convertView.FindViewById<TextView>(Resource.Id.ovt1b).SetTypeface(Typeface.Monospace, TypefaceStyle.Italic);
+                            convertView.FindViewById<TextView>(Resource.Id.ovt1b).SetTextSize(Android.Util.ComplexUnitType.Sp, 13);
+                            convertView.FindViewById<TextView>(Resource.Id.ovt1b).Visibility = ViewStates.Visible;
+                            convertView.FindViewById<TextView>(Resource.Id.ovt3).Visibility = ViewStates.Gone;
+                            convertView.FindViewById<TextView>(Resource.Id.ovt2).Visibility = ViewStates.Gone;
                         }
 
-                        convertView.FindViewById\\(Resource.Id.ovt1b).Click += delegate{
+                        convertView.FindViewById<TextView>(Resource.Id.ovt1b).Click += delegate {
                             if (position == 0)
                             {
-                                convertView.FindViewById\\(Resource.Id.ovt1b).Enabled = false;
-                                convertView.FindViewById\\(Resource.Id.ovt1).Enabled = false;
+                                convertView.FindViewById<TextView>(Resource.Id.ovt1b).Enabled = false;
+                                convertView.FindViewById<TextView>(Resource.Id.ovt1).Enabled = false;
                                 activity.Recreate();
                             }
                         };
-                        convertView.FindViewById\\(Resource.Id.ovt1).Click += delegate {
+                        convertView.FindViewById<TextView>(Resource.Id.ovt1).Click += delegate {
                             if (position == 0)
                             {
-                                convertView.FindViewById\\(Resource.Id.ovt1b).Enabled = false;
-                                convertView.FindViewById\\(Resource.Id.ovt1).Enabled = false;
+                                convertView.FindViewById<TextView>(Resource.Id.ovt1b).Enabled = false;
+                                convertView.FindViewById<TextView>(Resource.Id.ovt1).Enabled = false;
                                 activity.Recreate();
                             }
                         };
@@ -290,26 +290,26 @@ namespace BitfiWallet
                     if (action == "accounts" && NWSfiltered != null)
                     {
 
-                        TextView tv1 = convertView.FindViewById\\(Resource.Id.ovt1);
+                        TextView tv1 = convertView.FindViewById<TextView>(Resource.Id.ovt1);
                         tv1.Visibility = ViewStates.Gone;
-                        convertView.FindViewById\\(Resource.Id.ovt2).Text = NWSfiltered[position].BlkNet.ToUpper();
-                        convertView.FindViewById\\(Resource.Id.ovt3).Text = NWSfiltered[position].BTCAddress;
-                        convertView.FindViewById\\(Resource.Id.ovt2).SetTextSize(Android.Util.ComplexUnitType.Sp, 16);
-                        convertView.FindViewById\\(Resource.Id.ovt3).SetTextSize(Android.Util.ComplexUnitType.Sp, 13); 
+                        convertView.FindViewById<TextView>(Resource.Id.ovt2).Text = NWSfiltered[position].BlkNet.ToUpper();
+                        convertView.FindViewById<TextView>(Resource.Id.ovt3).Text = NWSfiltered[position].BTCAddress;
+                        convertView.FindViewById<TextView>(Resource.Id.ovt2).SetTextSize(Android.Util.ComplexUnitType.Sp, 16);
+                        convertView.FindViewById<TextView>(Resource.Id.ovt3).SetTextSize(Android.Util.ComplexUnitType.Sp, 13);
 
                         if (position == 0)
                         {
-                          //  convertView.FindViewById\\(Resource.Id.ovt1b).SetTextColor(new Color(Resource.Color.black_overlay));
-                            convertView.FindViewById\\(Resource.Id.ovt1b).Text = "[balances]";
-                            convertView.FindViewById\\(Resource.Id.ovt1b).SetTypeface(Typeface.Monospace, TypefaceStyle.Italic);
-                            convertView.FindViewById\\(Resource.Id.ovt1b).SetTextSize(Android.Util.ComplexUnitType.Sp, 12);
-                            convertView.FindViewById\\(Resource.Id.ovt1b).Visibility = ViewStates.Visible;
-                            convertView.FindViewById\\(Resource.Id.ovt3).Visibility = ViewStates.Gone;
-                            convertView.FindViewById\\(Resource.Id.ovt2).Visibility = ViewStates.Gone;
+                            //  convertView.FindViewById<TextView>(Resource.Id.ovt1b).SetTextColor(new Color(Resource.Color.black_overlay));
+                            convertView.FindViewById<TextView>(Resource.Id.ovt1b).Text = "[balances]";
+                            convertView.FindViewById<TextView>(Resource.Id.ovt1b).SetTypeface(Typeface.Monospace, TypefaceStyle.Italic);
+                            convertView.FindViewById<TextView>(Resource.Id.ovt1b).SetTextSize(Android.Util.ComplexUnitType.Sp, 12);
+                            convertView.FindViewById<TextView>(Resource.Id.ovt1b).Visibility = ViewStates.Visible;
+                            convertView.FindViewById<TextView>(Resource.Id.ovt3).Visibility = ViewStates.Gone;
+                            convertView.FindViewById<TextView>(Resource.Id.ovt2).Visibility = ViewStates.Gone;
                             tv1.Visibility = ViewStates.Visible;
                             tv1.Text = NWSfiltered[position].ViewKey;
                         }
-                        convertView.FindViewById\\(Resource.Id.ovt1b).Click += delegate {
+                        convertView.FindViewById<TextView>(Resource.Id.ovt1b).Click += delegate {
                             if (position == 0)
                             {
                                 action = "overview";
@@ -317,16 +317,16 @@ namespace BitfiWallet
                             }
                         };
                         convertView.FindViewById(Resource.Id.ovinf).Click += delegate {
-                            if (position \>\ 0)
+                            if (position > 0)
                             {
                                 ImageView image = new ImageView(context);
                                 image.SetImageBitmap(ConvertQr(NWSfiltered[position].BTCAddress, NWSfiltered[position].BlkNet));
-                                AlertDialog.Builder builder = new AlertDialog.Builder(context).SetTitle(NWSfiltered[position].BlkNet.ToUpper()).SetMessage(NWSfiltered[position].BTCAddress).SetCancelable(true).SetPositiveButton("CLOSE", (EventHandler\\)null);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(context).SetTitle(NWSfiltered[position].BlkNet.ToUpper()).SetMessage(NWSfiltered[position].BTCAddress).SetCancelable(true).SetPositiveButton("CLOSE", (EventHandler<DialogClickEventArgs>)null);
                                 AlertDialog alert = builder.Create();
                                 alert.SetView(image);
                                 alert.Show();
                                 var okBtn = alert.GetButton((int)DialogButtonType.Positive);
-                                okBtn.Click += (asender, args) =\>\
+                                okBtn.Click += (asender, args) =>
                                 {
                                     alert.Dismiss();
                                 };
@@ -341,11 +341,11 @@ namespace BitfiWallet
             }
             public void DisplayMSG(string msg)
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context).SetTitle("").SetMessage(msg).SetCancelable(false).SetPositiveButton("Ok", (EventHandler\\)null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context).SetTitle("").SetMessage(msg).SetCancelable(false).SetPositiveButton("Ok", (EventHandler<DialogClickEventArgs>)null);
                 AlertDialog alert = builder.Create();
                 alert.Show();
                 var okBtn = alert.GetButton((int)DialogButtonType.Positive);
-                okBtn.Click += (asender, args) =\>\
+                okBtn.Click += (asender, args) =>
                 {
                     alert.Dismiss();
 
@@ -354,16 +354,16 @@ namespace BitfiWallet
             public Bitmap GenerateQrCodeRaw(string url, int height = 300, int width = 300, int margin = 10)
             {
                 BarcodeWriter qrWriter = new BarcodeWriter();
-                 qrWriter.Format = BarcodeFormat.QR_CODE;
-                 qrWriter.Options = new EncodingOptions()
-                 {
-                     Height = height,
-                     Width = width,
-                     Margin = margin
-                  };
+                qrWriter.Format = BarcodeFormat.QR_CODE;
+                qrWriter.Options = new EncodingOptions()
+                {
+                    Height = height,
+                    Width = width,
+                    Margin = margin
+                };
 
                 var barcode = qrWriter.Write(url);
-                 return barcode;
+                return barcode;
 
             }
             public Bitmap ConvertQr(string address, string blk)

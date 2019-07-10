@@ -3,7 +3,7 @@ using Ripple.Core.Binary;
 
 namespace Ripple.Core.Types
 {
-    public class Uint8 : Uint\\
+    public class Uint8 : Uint<byte>
     {
         public Uint8(byte value) : base(value)
         {

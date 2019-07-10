@@ -18,8 +18,8 @@ namespace Ripple.Core.Binary
             
         }
 
-        public override void Skip(int n) =\>\ Cursor += n;
-        public override byte ReadOne() =\>\ Bytes[Cursor++];
+        public override void Skip(int n) => Cursor += n;
+        public override byte ReadOne() => Bytes[Cursor++];
 
         public override byte[] Read(int n)
         {

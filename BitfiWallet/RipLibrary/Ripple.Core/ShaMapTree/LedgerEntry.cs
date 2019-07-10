@@ -5,7 +5,7 @@ using Ripple.Core.Types;
 
 namespace Ripple.Core.ShaMapTree
 {
-    public class LedgerEntry : IShaMapItem\\
+    public class LedgerEntry : IShaMapItem<LedgerEntry>
     {
         public readonly StObject Entry;
 
@@ -19,7 +19,7 @@ namespace Ripple.Core.ShaMapTree
             Entry.ToBytes(sink);
         }
 
-        public IShaMapItem\\ Copy()
+        public IShaMapItem<LedgerEntry> Copy()
         {
             return this;
         }

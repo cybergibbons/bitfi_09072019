@@ -3,9 +3,9 @@ using Ripple.Core.Enums;
 
 namespace Ripple.Core.Types
 {
-    public class LedgerEntryType : SerializedEnumItem\\
+    public class LedgerEntryType : SerializedEnumItem<ushort>
     {
-        public class Enumeration : SerializedEnumeration\\{}
+        public class Enumeration : SerializedEnumeration<LedgerEntryType, ushort>{}
         public static Enumeration Values = new Enumeration();
         private LedgerEntryType(string name, int ordinal) : base(name, ordinal){}
         private static LedgerEntryType Add(string reference, int ordinal)

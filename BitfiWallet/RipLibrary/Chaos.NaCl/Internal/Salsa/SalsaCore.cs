@@ -5,7 +5,7 @@ namespace Chaos.NaCl.Internal.Salsa
 {
     internal static class SalsaCore
     {
-        public static void HSalsa(out Array16\\ output, ref Array16\\ input, int rounds)
+        public static void HSalsa(out Array16<UInt32> output, ref Array16<UInt32> input, int rounds)
         {
             InternalAssert.Assert(rounds % 2 == 0, "Number of salsa rounds must be even");
 
@@ -30,83 +30,89 @@ namespace Chaos.NaCl.Internal.Salsa
 
             unchecked
             {
-                for (int i = 0; i \\\>\ (32 - 7));
+                for (int i = 0; i < doubleRounds; i++)
+                {
+                    UInt32 y;
+
+                    // row 0
+                    y = x0 + x12;
+                    x4 ^= (y << 7) | (y >> (32 - 7));
                     y = x4 + x0;
-                    x8 ^= (y \\\>\ (32 - 9));
+                    x8 ^= (y << 9) | (y >> (32 - 9));
                     y = x8 + x4;
-                    x12 ^= (y \\\>\ (32 - 13));
+                    x12 ^= (y << 13) | (y >> (32 - 13));
                     y = x12 + x8;
-                    x0 ^= (y \\\>\ (32 - 18));
+                    x0 ^= (y << 18) | (y >> (32 - 18));
 
                     // row 1
                     y = x5 + x1;
-                    x9 ^= (y \\\>\ (32 - 7));
+                    x9 ^= (y << 7) | (y >> (32 - 7));
                     y = x9 + x5;
-                    x13 ^= (y \\\>\ (32 - 9));
+                    x13 ^= (y << 9) | (y >> (32 - 9));
                     y = x13 + x9;
-                    x1 ^= (y \\\>\ (32 - 13));
+                    x1 ^= (y << 13) | (y >> (32 - 13));
                     y = x1 + x13;
-                    x5 ^= (y \\\>\ (32 - 18));
+                    x5 ^= (y << 18) | (y >> (32 - 18));
 
                     // row 2
                     y = x10 + x6;
-                    x14 ^= (y \\\>\ (32 - 7));
+                    x14 ^= (y << 7) | (y >> (32 - 7));
                     y = x14 + x10;
-                    x2 ^= (y \\\>\ (32 - 9));
+                    x2 ^= (y << 9) | (y >> (32 - 9));
                     y = x2 + x14;
-                    x6 ^= (y \\\>\ (32 - 13));
+                    x6 ^= (y << 13) | (y >> (32 - 13));
                     y = x6 + x2;
-                    x10 ^= (y \\\>\ (32 - 18));
+                    x10 ^= (y << 18) | (y >> (32 - 18));
 
                     // row 3
                     y = x15 + x11;
-                    x3 ^= (y \\\>\ (32 - 7));
+                    x3 ^= (y << 7) | (y >> (32 - 7));
                     y = x3 + x15;
-                    x7 ^= (y \\\>\ (32 - 9));
+                    x7 ^= (y << 9) | (y >> (32 - 9));
                     y = x7 + x3;
-                    x11 ^= (y \\\>\ (32 - 13));
+                    x11 ^= (y << 13) | (y >> (32 - 13));
                     y = x11 + x7;
-                    x15 ^= (y \\\>\ (32 - 18));
+                    x15 ^= (y << 18) | (y >> (32 - 18));
 
                     // column 0
                     y = x0 + x3;
-                    x1 ^= (y \\\>\ (32 - 7));
+                    x1 ^= (y << 7) | (y >> (32 - 7));
                     y = x1 + x0;
-                    x2 ^= (y \\\>\ (32 - 9));
+                    x2 ^= (y << 9) | (y >> (32 - 9));
                     y = x2 + x1;
-                    x3 ^= (y \\\>\ (32 - 13));
+                    x3 ^= (y << 13) | (y >> (32 - 13));
                     y = x3 + x2;
-                    x0 ^= (y \\\>\ (32 - 18));
+                    x0 ^= (y << 18) | (y >> (32 - 18));
 
                     // column 1
                     y = x5 + x4;
-                    x6 ^= (y \\\>\ (32 - 7));
+                    x6 ^= (y << 7) | (y >> (32 - 7));
                     y = x6 + x5;
-                    x7 ^= (y \\\>\ (32 - 9));
+                    x7 ^= (y << 9) | (y >> (32 - 9));
                     y = x7 + x6;
-                    x4 ^= (y \\\>\ (32 - 13));
+                    x4 ^= (y << 13) | (y >> (32 - 13));
                     y = x4 + x7;
-                    x5 ^= (y \\\>\ (32 - 18));
+                    x5 ^= (y << 18) | (y >> (32 - 18));
 
                     // column 2
                     y = x10 + x9;
-                    x11 ^= (y \\\>\ (32 - 7));
+                    x11 ^= (y << 7) | (y >> (32 - 7));
                     y = x11 + x10;
-                    x8 ^= (y \\\>\ (32 - 9));
+                    x8 ^= (y << 9) | (y >> (32 - 9));
                     y = x8 + x11;
-                    x9 ^= (y \\\>\ (32 - 13));
+                    x9 ^= (y << 13) | (y >> (32 - 13));
                     y = x9 + x8;
-                    x10 ^= (y \\\>\ (32 - 18));
+                    x10 ^= (y << 18) | (y >> (32 - 18));
 
                     // column 3
                     y = x15 + x14;
-                    x12 ^= (y \\\>\ (32 - 7));
+                    x12 ^= (y << 7) | (y >> (32 - 7));
                     y = x12 + x15;
-                    x13 ^= (y \\\>\ (32 - 9));
+                    x13 ^= (y << 9) | (y >> (32 - 9));
                     y = x13 + x12;
-                    x14 ^= (y \\\>\ (32 - 13));
+                    x14 ^= (y << 13) | (y >> (32 - 13));
                     y = x14 + x13;
-                    x15 ^= (y \\\>\ (32 - 18));
+                    x15 ^= (y << 18) | (y >> (32 - 18));
                 }
             }
 
@@ -128,9 +134,9 @@ namespace Chaos.NaCl.Internal.Salsa
             output.x15 = x15;
         }
 
-        public static void Salsa(out Array16\\ output, ref Array16\\ input, int rounds)
+        public static void Salsa(out Array16<UInt32> output, ref Array16<UInt32> input, int rounds)
         {
-            Array16\\ temp;
+            Array16<UInt32> temp;
             HSalsa(out temp, ref input, rounds);
             unchecked
             {
@@ -162,9 +168,9 @@ namespace Chaos.NaCl.Internal.Salsa
 
 static void store_littleendian(unsigned char *x,uint32 u)
 {
-  x[0] = u; u \>\\>\= 8;
-  x[1] = u; u \>\\>\= 8;
-  x[2] = u; u \>\\>\= 8;
+  x[0] = u; u >>= 8;
+  x[1] = u; u >>= 8;
+  x[2] = u; u >>= 8;
   x[3] = u;
 }
 
@@ -174,7 +180,7 @@ static void store_littleendian(unsigned char *x,uint32 u)
                 throw new ArgumentException("rounds must be even");
             static uint32 rotate(uint32 u,int c)
 {
-  return (u \\\>\ (32 - c));
+  return (u << c) | (u >> (32 - c));
 }
 
 
@@ -206,7 +212,7 @@ int crypto_core(
   x14 = load_littleendian(k + 28);
   x15 = load_littleendian(c + 12);
 
-  for (i = ROUNDS;i \>\ 0;i -= 2) {
+  for (i = ROUNDS;i > 0;i -= 2) {
      x4 ^= rotate( x0+x12, 7);
      x8 ^= rotate( x4+ x0, 9);
     x12 ^= rotate( x8+ x4,13);

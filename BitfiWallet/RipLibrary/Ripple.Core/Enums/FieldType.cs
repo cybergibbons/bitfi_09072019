@@ -2,7 +2,7 @@ namespace Ripple.Core.Enums
 {
     public class FieldType : EnumItem
     {
-        public static Enumeration\\ Values = new Enumeration\\(); 
+        public static Enumeration<FieldType> Values = new Enumeration<FieldType>(); 
         public FieldType(string name, int ordinal) : base(name, ordinal)
         {
             Values.AddEnum(this);

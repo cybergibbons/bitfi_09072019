@@ -2,9 +2,9 @@ using Ripple.Core.Enums;
 
 namespace Ripple.Core.Types
 {
-    public class EngineResult : SerializedEnumItem\\
+    public class EngineResult : SerializedEnumItem<byte>
     {
-        public class EngineResultValues : SerializedEnumeration\\{}
+        public class EngineResultValues : SerializedEnumeration<EngineResult, byte>{}
         public static EngineResultValues Values = new EngineResultValues();
         private readonly string _description;
         public EngineResult(string name, int ordinal, string description) : base(name, ordinal)
@@ -118,7 +118,8 @@ namespace Ripple.Core.Types
         // ReSharper restore InconsistentNaming
         public bool ShouldClaimFee()
         {
-            // tesSUCCESS and tecCLAIMED are \>\= 0, rest are \\= 0;
+            // tesSUCCESS and tecCLAIMED are >= 0, rest are < 0
+            return Ordinal >= 0;
         }
     }
 }

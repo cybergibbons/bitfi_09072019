@@ -35,10 +35,10 @@ namespace Ripple.Signing.K256
         }
 
         ///
-        /// \\ secret scalar\\
-        /// \\ the corresponding public key is the public generator
+        /// <param name="privateGen"> secret scalar</param>
+        /// <returns> the corresponding public key is the public generator
         ///         (aka public root key, master public key).
-        /// \\
+        /// </returns>
         public static ECPoint ComputePublicGenerator(BigInteger privateGen)
         {
             return ComputePublicKey(privateGen);
@@ -53,15 +53,35 @@ namespace Ripple.Signing.K256
             return offset.GetEncoded(true);
         }
 
-        /// \\ - a bytes sequence of arbitrary length which will be hashed \\
-        /// \\ - nullable optional uint32 to hash \\
-        /// \\ a number between [1, order -1] suitable as a private key
-        ///  \\
+        /// <param name="seedBytes"> - a bytes sequence of arbitrary length which will be hashed </param>
+        /// <param name="discriminator"> - nullable optional uint32 to hash </param>
+        /// <returns> a number between [1, order -1] suitable as a private key
+        ///  </returns>
         public static BigInteger ComputeScalar(byte[] seedBytes, uint? discriminator)
         {
             BigInteger key = null;
-            for (uint i = 0; i \\ secret point on the curve as BigInteger \\
-        /// \\ corresponding public point \\
+            for (uint i = 0; i <= 0xFFFFFFFFL; i++)
+            {
+                var sha512 = new Sha512(seedBytes);
+                if (discriminator != null)
+                {
+                    sha512.AddU32(discriminator.Value);
+                }
+                sha512.AddU32(i);
+                byte[] keyBytes = sha512.Finish256();
+                key = Misc.UBigInt(keyBytes);
+                if (key.CompareTo(BigInteger.Zero) == 1 &&
+                    key.CompareTo(Secp256K1.Order()) == -1)
+                {
+                    break;
+                }
+            }
+            return key;
+        }
+
+        ///
+        /// <param name="secretKey"> secret point on the curve as BigInteger </param>
+        /// <returns> corresponding public point </returns>
         public static ECPoint ComputePublicKey(BigInteger secretKey)
         {
             return Secp256K1.BasePoint().Multiply(secretKey);

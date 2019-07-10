@@ -12,7 +12,7 @@ namespace EthereumLibrary.RLP
     {
       this.rlpData = rlpData;
     }
-    public byte[] RLPData =\>\ GetRLPData();
+    public byte[] RLPData => GetRLPData();
     private byte[] GetRLPData()
     {
       return rlpData.Length == 0 ? null : rlpData;

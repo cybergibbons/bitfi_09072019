@@ -43,7 +43,7 @@ namespace Chaos.NaCl.Internal.Ed25519Ref10
 				FieldOperations.fe_mul(out h.X, ref  h.X, ref  LookupTables.sqrtm1);
 			}
 
-			if (FieldOperations.fe_isnegative(ref h.X) == (data[offset + 31] \>\\>\ 7))
+			if (FieldOperations.fe_isnegative(ref h.X) == (data[offset + 31] >> 7))
 				FieldOperations.fe_neg(out h.X, ref h.X);
 
 			FieldOperations.fe_mul(out h.T, ref h.X, ref h.Y);

@@ -30,11 +30,11 @@ namespace Ripple.Core.Types
 
         public int Nibblet(int depth)
         {
-            var byteIx = depth \>\ 0 ? depth / 2 : 0;
+            var byteIx = depth > 0 ? depth / 2 : 0;
             int b = Buffer[byteIx];
             if (depth % 2 == 0)
             {
-                b = (b & 0xF0) \>\\>\ 4;
+                b = (b & 0xF0) >> 4;
             }
             else
             {

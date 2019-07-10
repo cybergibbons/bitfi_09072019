@@ -6,7 +6,7 @@ using Ripple.Core.Util;
 
 namespace Ripple.Core.Types
 {
-    public abstract class Hash : ISerializedType, IEquatable\\
+    public abstract class Hash : ISerializedType, IEquatable<Hash>
     {
         public readonly byte[] Buffer;
         protected Hash(byte[] buffer)
@@ -34,6 +34,6 @@ namespace Ripple.Core.Types
             return B16.Encode(Buffer);
         }
 
-        public static explicit operator string(Hash h) =\>\ h.ToHex();
+        public static explicit operator string(Hash h) => h.ToHex();
     }
 }

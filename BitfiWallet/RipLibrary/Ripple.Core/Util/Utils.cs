@@ -7,10 +7,10 @@ namespace Ripple.Core.Util
     {
         public static byte[] ZeroPad(byte[] arr, int len)
         {
-            if (arr.Length \>\ len)
+            if (arr.Length > len)
             {
                 throw new InvalidOperationException(
-                    $"Existing length of {arr.Length} \>\ " +
+                    $"Existing length of {arr.Length} > " +
                     $"desired length of {len}");
             }
             if (arr.Length == len)
@@ -24,22 +24,22 @@ namespace Ripple.Core.Util
         }
     }
 
-    /// \\
+    /// <summary>
     ///     Converts base data types to an array of bytes, and an array of bytes to base
     ///     data types.
     ///     All info taken from the meta data of System.BitConverter. This implementation
     ///     allows for Endianness consideration.
-    ///\\
+    ///</summary>
     public static class Bits
     {
-        /// \\
+        /// <summary>
         ///     Indicates the byte order ("endianess") in which data is stored in this computer
         ///     architecture.
-        ///\\
+        ///</summary>
         /// 
         public static bool IsLittleEndian { get; set; } = false;
 
-        /// \\
+        /// <summary>
         ///     Converts the specified double-precision floating point number to a 64-bit
         ///     signed integer.
         ///
@@ -49,10 +49,10 @@ namespace Ripple.Core.Util
         ///
         /// Returns:
         ///     A 64-bit signed integer whose value is equivalent to value.
-        ///\\
+        ///</summary>
         public static long DoubleToInt64Bits(double value) { throw new NotImplementedException(); }
         ///
-        /// \\
+        /// <summary>
         ///     Returns the specified Boolean value as an array of bytes.
         ///
         /// Parameters:
@@ -61,7 +61,7 @@ namespace Ripple.Core.Util
         ///
         /// Returns:
         ///     An array of bytes with length 1.
-        ///\\
+        ///</summary>
         public static byte[] GetBytes(bool value)
         {
             if (IsLittleEndian)
@@ -77,7 +77,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns the specified Unicode character value as an array of bytes.
         ///
         /// Parameters:
@@ -86,7 +86,7 @@ namespace Ripple.Core.Util
         ///
         /// Returns:
         ///     An array of bytes with length 2.
-        ///\\
+        ///</summary>
         public static byte[] GetBytes(char value)
         {
             if (IsLittleEndian)
@@ -97,7 +97,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns the specified double-precision floating point value as an array of
         ///     bytes.
         ///
@@ -107,7 +107,7 @@ namespace Ripple.Core.Util
         ///
         /// Returns:
         ///     An array of bytes with length 8.
-        ///\\
+        ///</summary>
         public static byte[] GetBytes(double value)
         {
             if (IsLittleEndian)
@@ -118,7 +118,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns the specified single-precision floating point value as an array of
         ///     bytes.
         ///
@@ -128,7 +128,7 @@ namespace Ripple.Core.Util
         ///
         /// Returns:
         ///     An array of bytes with length 4.
-        ///\\
+        ///</summary>
         public static byte[] GetBytes(float value)
         {
             if (IsLittleEndian)
@@ -139,7 +139,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns the specified 32-bit signed integer value as an array of bytes.
         ///
         /// Parameters:
@@ -148,7 +148,7 @@ namespace Ripple.Core.Util
         ///
         /// Returns:
         ///     An array of bytes with length 4.
-        ///\\
+        ///</summary>
         public static byte[] GetBytes(int value)
         {
             if (IsLittleEndian)
@@ -159,7 +159,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns the specified 64-bit signed integer value as an array of bytes.
         ///
         /// Parameters:
@@ -168,7 +168,7 @@ namespace Ripple.Core.Util
         ///
         /// Returns:
         ///     An array of bytes with length 8.
-        ///\\
+        ///</summary>
         public static byte[] GetBytes(long value)
         {
             if (IsLittleEndian)
@@ -179,7 +179,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns the specified 16-bit signed integer value as an array of bytes.
         ///
         /// Parameters:
@@ -188,7 +188,7 @@ namespace Ripple.Core.Util
         ///
         /// Returns:
         ///     An array of bytes with length 2.
-        ///\\
+        ///</summary>
         public static byte[] GetBytes(short value)
         {
             if (IsLittleEndian)
@@ -199,7 +199,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns the specified 32-bit unsigned integer value as an array of bytes.
         ///
         /// Parameters:
@@ -208,7 +208,7 @@ namespace Ripple.Core.Util
         ///
         /// Returns:
         ///     An array of bytes with length 4.
-        ///\\
+        ///</summary>
         
         public static byte[] GetBytes(uint value)
         {
@@ -220,7 +220,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns the specified 64-bit unsigned integer value as an array of bytes.
         ///
         /// Parameters:
@@ -229,7 +229,7 @@ namespace Ripple.Core.Util
         ///
         /// Returns:
         ///     An array of bytes with length 8.
-        ///\\
+        ///</summary>
         
         public static byte[] GetBytes(ulong value)
         {
@@ -241,7 +241,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns the specified 16-bit unsigned integer value as an array of bytes.
         ///
         /// Parameters:
@@ -250,7 +250,7 @@ namespace Ripple.Core.Util
         ///
         /// Returns:
         ///     An array of bytes with length 2.
-        ///\\
+        ///</summary>
         public static byte[] GetBytes(ushort value)
         {
             if (IsLittleEndian)
@@ -261,7 +261,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Converts the specified 64-bit signed integer to a double-precision floating
         ///     point number.
         ///
@@ -271,10 +271,10 @@ namespace Ripple.Core.Util
         ///
         /// Returns:
         ///     A double-precision floating point number whose value is equivalent to value.
-        ///\\
+        ///</summary>
         public static double Int64BitsToDouble(long value) { throw new NotImplementedException(); }
         ///
-        /// \\
+        /// <summary>
         ///     Returns a Boolean value converted from one byte at a specified position in
         ///     a byte array.
         ///
@@ -294,10 +294,10 @@ namespace Ripple.Core.Util
         ///
         ///   System.ArgumentOutOfRangeException:
         ///     startIndex is less than zero or greater than the length of value minus 1.
-        ///\\
+        ///</summary>
         public static bool ToBoolean(byte[] value, int startIndex) { throw new NotImplementedException(); }
         ///
-        /// \\
+        /// <summary>
         ///     Returns a Unicode character converted from two bytes at a specified position
         ///     in a byte array.
         ///
@@ -320,10 +320,10 @@ namespace Ripple.Core.Util
         ///
         ///   System.ArgumentOutOfRangeException:
         ///     startIndex is less than zero or greater than the length of value minus 1.
-        ///\\
+        ///</summary>
         public static char ToChar(byte[] value, int startIndex) { throw new NotImplementedException(); }
         ///
-        /// \\
+        /// <summary>
         ///     Returns a double-precision floating point number converted from eight bytes
         ///     at a specified position in a byte array.
         ///
@@ -348,10 +348,10 @@ namespace Ripple.Core.Util
         ///
         ///   System.ArgumentOutOfRangeException:
         ///     startIndex is less than zero or greater than the length of value minus 1.
-        ///\\
+        ///</summary>
         public static double ToDouble(byte[] value, int startIndex) { throw new NotImplementedException(); }
         ///
-        /// \\
+        /// <summary>
         ///     Returns a 16-bit signed integer converted from two bytes at a specified position
         ///     in a byte array.
         ///
@@ -374,7 +374,7 @@ namespace Ripple.Core.Util
         ///
         ///   System.ArgumentOutOfRangeException:
         ///     startIndex is less than zero or greater than the length of value minus 1.
-        ///\\
+        ///</summary>
         public static short ToInt16(byte[] value, int startIndex)
         {
             if (IsLittleEndian)
@@ -385,7 +385,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns a 32-bit signed integer converted from four bytes at a specified
         ///     position in a byte array.
         ///
@@ -409,7 +409,7 @@ namespace Ripple.Core.Util
         ///
         ///   System.ArgumentOutOfRangeException:
         ///     startIndex is less than zero or greater than the length of value minus 1.
-        ///\\
+        ///</summary>
         public static int ToInt32(byte[] value, int startIndex)
         {
             if (IsLittleEndian)
@@ -420,7 +420,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns a 64-bit signed integer converted from eight bytes at a specified
         ///     position in a byte array.
         ///
@@ -444,7 +444,7 @@ namespace Ripple.Core.Util
         ///
         ///   System.ArgumentOutOfRangeException:
         ///     startIndex is less than zero or greater than the length of value minus 1.
-        ///\\
+        ///</summary>
         public static long ToInt64(byte[] value, int startIndex)
         {
             if (IsLittleEndian)
@@ -455,7 +455,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns a single-precision floating point number converted from four bytes
         ///     at a specified position in a byte array.
         ///
@@ -480,7 +480,7 @@ namespace Ripple.Core.Util
         ///
         ///   System.ArgumentOutOfRangeException:
         ///     startIndex is less than zero or greater than the length of value minus 1.
-        ///\\
+        ///</summary>
         public static float ToSingle(byte[] value, int startIndex)
         {
             if (IsLittleEndian)
@@ -491,7 +491,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Converts the numeric value of each element of a specified array of bytes
         ///     to its equivalent hexadecimal string representation.
         ///
@@ -506,7 +506,7 @@ namespace Ripple.Core.Util
         /// Exceptions:
         ///   System.ArgumentNullException:
         ///     value is null.
-        ///\\
+        ///</summary>
         public static string ToString(byte[] value)
         {
             if (IsLittleEndian)
@@ -517,7 +517,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Converts the numeric value of each element of a specified subarray of bytes
         ///     to its equivalent hexadecimal string representation.
         ///
@@ -539,7 +539,7 @@ namespace Ripple.Core.Util
         ///
         ///   System.ArgumentOutOfRangeException:
         ///     startIndex is less than zero or greater than the length of value minus 1.
-        ///\\
+        ///</summary>
         public static string ToString(byte[] value, int startIndex)
         {
             if (IsLittleEndian)
@@ -550,7 +550,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Converts the numeric value of each element of a specified subarray of bytes
         ///     to its equivalent hexadecimal string representation.
         ///
@@ -581,7 +581,7 @@ namespace Ripple.Core.Util
         ///     The combination of startIndex and length does not specify a position within
         ///     value; that is, the startIndex parameter is greater than the length of value
         ///     minus the length parameter.
-        ///\\
+        ///</summary>
         public static string ToString(byte[] value, int startIndex, int length)
         {
             if (IsLittleEndian)
@@ -592,7 +592,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns a 16-bit unsigned integer converted from two bytes at a specified
         ///     position in a byte array.
         ///
@@ -615,7 +615,7 @@ namespace Ripple.Core.Util
         ///
         ///   System.ArgumentOutOfRangeException:
         ///     startIndex is less than zero or greater than the length of value minus 1.
-        ///\\
+        ///</summary>
         public static ushort ToUInt16(byte[] value, int startIndex)
         {
             if (IsLittleEndian)
@@ -626,7 +626,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns a 32-bit unsigned integer converted from four bytes at a specified
         ///     position in a byte array.
         ///
@@ -650,7 +650,7 @@ namespace Ripple.Core.Util
         ///
         ///   System.ArgumentOutOfRangeException:
         ///     startIndex is less than zero or greater than the length of value minus 1.
-        ///\\
+        ///</summary>
         public static uint ToUInt32(byte[] value, int startIndex)
         {
             if (IsLittleEndian)
@@ -661,7 +661,7 @@ namespace Ripple.Core.Util
         }
 
         ///
-        /// \\
+        /// <summary>
         ///     Returns a 64-bit unsigned integer converted from eight bytes at a specified
         ///     position in a byte array.
         ///
@@ -685,7 +685,7 @@ namespace Ripple.Core.Util
         ///
         ///   System.ArgumentOutOfRangeException:
         ///     startIndex is less than zero or greater than the length of value minus 1.
-        ///\\
+        ///</summary>
         public static ulong ToUInt64(byte[] value, int startIndex)
         {
             if (IsLittleEndian)

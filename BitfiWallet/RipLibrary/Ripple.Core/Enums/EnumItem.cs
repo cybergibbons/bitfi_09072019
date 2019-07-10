@@ -2,7 +2,7 @@ using System;
 
 namespace Ripple.Core.Enums
 {
-    public class EnumItem : IComparable\\
+    public class EnumItem : IComparable<EnumItem>
     {
         public readonly int Ordinal;
         public readonly string Name;

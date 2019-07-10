@@ -56,12 +56,12 @@ namespace BitfiWallet
             }
             return pkey.SignMessage(Message);
         }
-        public AltTxn AltCoinSign(List\\ kbList, string tprocToAddress, List\\ txnRaw, string tprocAmount, string tprocNoxAddressBTCAddress, string tprocFeeValue)
+        public AltTxn AltCoinSign(List<byte[]> kbList, string tprocToAddress, List<NoxKeys.BCUnspent> txnRaw, string tprocAmount, string tprocNoxAddressBTCAddress, string tprocFeeValue)
         {
             if (net == null) throw new Exception("Invalid currency.");
             bool ChangeAChecked = false;
-            List\\ returnKeys = new List\\();
-            for (int i = 0; i \            {             
+            List<ISecret> returnKeys = new List<ISecret>();
+            for (int i = 0; i < kbList.Count; i++) {
                 Key pkey = new Key(kbList[i], -1, false);
                 returnKeys.Add(pkey.GetBitcoinSecret(net));
                 if (pkey.PubKey.GetAddress(net).ToString() == tprocNoxAddressBTCAddress)
@@ -88,14 +88,14 @@ namespace BitfiWallet
             var txn = MultipleTransV2(returnKeys.ToArray(), tprocToAddress, txnRaw, tprocAmount, tprocNoxAddressBTCAddress, tprocFeeValue, net);
             return txn;
         }
-        private AltTxn MultipleTransV2(ISecret[] secrects, string ToAddress, List\\ PrevTransList, string Amount, string ChangeAddress, string ExactFeeAmount, Network net)
+        private AltTxn MultipleTransV2(ISecret[] secrects, string ToAddress, List<NoxKeys.BCUnspent> PrevTransList, string Amount, string ChangeAddress, string ExactFeeAmount, Network net)
         {
             AltTxn resp = new AltTxn();
             try
             {
                 var txBuilder = net.CreateTransactionBuilder();
                 Transaction tx = Transaction.Create(net);
-                List\\ m1CoinsV = new List\\();
+                List<ICoin> m1CoinsV = new List<ICoin>();
                 long totalCoins = 0;
                 foreach (NoxKeys.BCUnspent trans in PrevTransList)
                 {

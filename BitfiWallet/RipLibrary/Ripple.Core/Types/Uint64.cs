@@ -4,7 +4,7 @@ using Ripple.Core.Util;
 
 namespace Ripple.Core.Types
 {
-    public class Uint64 : Uint\\
+    public class Uint64 : Uint<ulong>
     {
         public Uint64(ulong value) : base(value)
         {

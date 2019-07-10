@@ -6,7 +6,7 @@ namespace Chaos.NaCl
 {
     public class Sha512
     {
-        private Array8\\ _state;
+        private Array8<UInt64> _state;
         private readonly byte[] _buffer;
         private ulong _totalBytes;
         public const int BlockSize = 128;
@@ -24,7 +24,7 @@ namespace Chaos.NaCl
             _totalBytes = 0;
         }
 
-        public void Update(ArraySegment\\ data)
+        public void Update(ArraySegment<byte> data)
         {
             if (data.Array == null)
                 throw new ArgumentNullException("data.Array");
@@ -35,11 +35,18 @@ namespace Chaos.NaCl
         {
             if (data == null)
                 throw new ArgumentNullException("data");
-            if (offset \\ block;
+            if (offset < 0)
+                throw new ArgumentOutOfRangeException("offset");
+            if (count < 0)
+                throw new ArgumentOutOfRangeException("count");
+            if (data.Length - offset < count)
+                throw new ArgumentException("Requires offset + count <= data.Length");
+
+            Array16<ulong> block;
             int bytesInBuffer = (int)_totalBytes & (BlockSize - 1);
             _totalBytes += (uint)count;
 
-            if (_totalBytes \>\= ulong.MaxValue / 8)
+            if (_totalBytes >= ulong.MaxValue / 8)
                 throw new InvalidOperationException("Too much data");
             // Fill existing buffer
             if (bytesInBuffer != 0)
@@ -58,7 +65,7 @@ namespace Chaos.NaCl
                 }
             }
             // Hash complete blocks without copying
-            while (count \>\= BlockSize)
+            while (count >= BlockSize)
             {
                 ByteIntegerConverter.Array16LoadBigEndian64(out block, data, offset);
                 Sha512Internal.Core(out _state, ref _state, ref block);
@@ -66,13 +73,13 @@ namespace Chaos.NaCl
                 count -= BlockSize;
             }
             // Copy remainder into buffer
-            if (count \>\ 0)
+            if (count > 0)
             {
                 Buffer.BlockCopy(data, offset, _buffer, bytesInBuffer, count);
             }
         }
 
-        public void Finish(ArraySegment\\ output)
+        public void Finish(ArraySegment<byte> output)
         {
             if (output.Array == null)
                 throw new ArgumentNullException("output.Array");
@@ -80,14 +87,14 @@ namespace Chaos.NaCl
                 throw new ArgumentException("output.Count must be 64");
 
             Update(_padding, 0, _padding.Length);
-            Array16\\ block;
+            Array16<ulong> block;
             ByteIntegerConverter.Array16LoadBigEndian64(out block, _buffer, 0);
             CryptoBytes.InternalWipe(_buffer, 0, _buffer.Length);
             int bytesInBuffer = (int)_totalBytes & (BlockSize - 1);
-            if (bytesInBuffer \>\ BlockSize - 16)
+            if (bytesInBuffer > BlockSize - 16)
             {
                 Sha512Internal.Core(out _state, ref _state, ref block);
-                block = default(Array16\\);
+                block = default(Array16<ulong>);
             }
             block.x15 = (_totalBytes - 1) * 8;
             Sha512Internal.Core(out _state, ref _state, ref block);
@@ -100,13 +107,13 @@ namespace Chaos.NaCl
             ByteIntegerConverter.StoreBigEndian64(output.Array, output.Offset + 40, _state.x5);
             ByteIntegerConverter.StoreBigEndian64(output.Array, output.Offset + 48, _state.x6);
             ByteIntegerConverter.StoreBigEndian64(output.Array, output.Offset + 56, _state.x7);
-            _state = default(Array8\\);
+            _state = default(Array8<ulong>);
         }
 
         public byte[] Finish()
         {
             var result = new byte[64];
-            Finish(new ArraySegment\\(result));
+            Finish(new ArraySegment<byte>(result));
             return result;
         }
 

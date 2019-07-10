@@ -36,7 +36,7 @@ namespace BitfiWallet
             byte[] genKeysDataRes = new byte[genKeysDataLen];
             XMRNative.GetKeysAndAddressGetData(genKeysDataRes, genKeysDataLen);
             var genKeysDataString = Encoding.UTF8.GetString(genKeysDataRes);
-            return JsonConvert.DeserializeObject\\(genKeysDataString, ser);
+            return JsonConvert.DeserializeObject<address_response>(genKeysDataString, ser);
         }
         public key_images_response GetKeyImage(string ViewKey, string PubKey, string Secret, string Txn)
         {
@@ -50,7 +50,7 @@ namespace BitfiWallet
             byte[] res123 = new byte[rrr];
             XMRNative.GenerateKeyImageGetData(res123, rrr);
             var result123 = Encoding.UTF8.GetString(res123);
-            return JsonConvert.DeserializeObject\\(result123, ser);
+            return JsonConvert.DeserializeObject<key_images_response>(result123, ser);
         }
         private decimal NDFormat(string valueparam, int decimalsparam)
         {
@@ -76,17 +76,18 @@ namespace BitfiWallet
             byte[] s1compdata = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(step1Prepare, ser));
             int s1len = XMRNative.s1compute(s1compdata, s1compdata.Length); s1compdata = new byte[s1len]; XMRNative.s1getdata(s1compdata, s1len);
             s1jData = System.Text.Encoding.UTF8.GetString(s1compdata);
-            Step1Response step1Response = JsonConvert.DeserializeObject\\(s1jData, ser);
+            Step1Response step1Response = JsonConvert.DeserializeObject<Step1Response>(s1jData, ser);
             if (!string.IsNullOrEmpty(step1Response.err_msg)) throw new Exception(step1Response.err_msg);
             if (!string.IsNullOrEmpty(step1Response.using_fee) && !string.IsNullOrEmpty(data.MaxAllowedFee))
             {
                 BigInteger UsingFee = BigInteger.Parse(step1Response.using_fee);
                 BigInteger MaxFee = BigInteger.Parse(data.MaxAllowedFee);
-                if (UsingFee \>\ MaxFee) throw new Exception("Max fee exceeded by " + NDReverse((UsingFee - MaxFee).ToString(), 12));
+                if (UsingFee > MaxFee) throw new Exception("Max fee exceeded by " + NDReverse((UsingFee - MaxFee).ToString(), 12));
             }
             string[] amounts = new string[step1Response.using_outs.Length];
-            for (int i = 0; i \            string mix = WS.XMRGetRandom(step1Response.mixin, amounts);
-            MixOutput[] mixOuts = JsonConvert.DeserializeObject\\(mix);
+            for (int i = 0; i < amounts.Length; i++) amounts[i] = "0";
+            string mix = WS.XMRGetRandom(step1Response.mixin, amounts);
+            MixOutput[] mixOuts = JsonConvert.DeserializeObject<MixOutput[]>(mix);
             Step2Prepare step2Prepare = ConcertFromWSObjectAndMergeStep1(step1Response, data, Amount, MoneroWallet.Converters.ByteArrayToHex(wallet.Keys.SpendSecret), MoneroWallet.Converters.ByteArrayToHex(wallet.Keys.ViewSecret), FromAddress, ToAddress, mixOuts);
 
             var s2 = JsonConvert.SerializeObject(step2Prepare, ser);
@@ -95,7 +96,7 @@ namespace BitfiWallet
             s2compdata = new byte[s2len];
             XMRNative.s2getdata(s2compdata, s2len);
             s2jData = System.Text.Encoding.UTF8.GetString(s2compdata);
-            Step2Response step2Response = JsonConvert.DeserializeObject\\(s2jData, ser);
+            Step2Response step2Response = JsonConvert.DeserializeObject<Step2Response>(s2jData, ser);
             return step2Response;
         }
         public XMRTaskTransferResponse XMR_Sign(string ToAddress, string Amount, string BaseData, string FromAddress)
@@ -109,7 +110,7 @@ namespace BitfiWallet
                 constructionAttempt = 1;
                 while (bool.Parse(step2Response.tx_must_be_reconstructed) || string.IsNullOrEmpty(step2Response.serialized_signed_tx))
                 {
-                    if (constructionAttempt \>\ kRECONSTRUCT_LIMIT)
+                    if (constructionAttempt > kRECONSTRUCT_LIMIT)
                     {
                         taskTransferResponse.Error = "Unable to construct a transaction with sufficient fee for unknown reason.";
                         return taskTransferResponse;
@@ -118,7 +119,7 @@ namespace BitfiWallet
 
                     constructionAttempt++;
                 }
-                if (!string.IsNullOrEmpty(step2Response.serialized_signed_tx) && step2Response.tx_key_images != null && step2Response.tx_key_images.Length \>\ 0)
+                if (!string.IsNullOrEmpty(step2Response.serialized_signed_tx) && step2Response.tx_key_images != null && step2Response.tx_key_images.Length > 0)
                 {
                     taskTransferResponse.TxnHex = step2Response.serialized_signed_tx;
                     taskTransferResponse.SpendKeyImages = step2Response.tx_key_images;
@@ -138,7 +139,7 @@ namespace BitfiWallet
         {
             byte[] bts = Convert.FromBase64String(BaseData);
             string jData = System.Text.Encoding.UTF8.GetString(bts);
-            var data = JsonConvert.DeserializeObject\\(jData, ser);
+            var data = JsonConvert.DeserializeObject<MoneroWalletInput>(jData, ser);
             return data;
         }
         public Step1Prepare ConvertFromWSObject(MoneroWalletInput data, string Amount)
@@ -151,7 +152,7 @@ namespace BitfiWallet
             step1Prepare.passedIn_attemptAt_fee = null;
             step1Prepare.payment_id_string = null;
             if (!string.IsNullOrEmpty(data.PassedInAttemptAtFee)) step1Prepare.passedIn_attemptAt_fee = data.PassedInAttemptAtFee;
-            if (!string.IsNullOrEmpty(data.PaymentIdString) && data.PaymentIdString.Length \>\ 10) step1Prepare.payment_id_string = data.PaymentIdString;
+            if (!string.IsNullOrEmpty(data.PaymentIdString) && data.PaymentIdString.Length > 10) step1Prepare.payment_id_string = data.PaymentIdString;
             if (!string.IsNullOrEmpty(data.fee_mask))
             {
                 step1Prepare.fee_mask = data.fee_mask;
@@ -160,7 +161,7 @@ namespace BitfiWallet
             {
                 step1Prepare.fee_mask = "10000";
             }
-            List\\ UnspentList = new List\\();
+            List<outs> UnspentList = new List<outs>();
             foreach (var usedOutputs in data.UnspentOuts)
             {
                 outs Unspent_Out = new outs();
@@ -190,7 +191,7 @@ namespace BitfiWallet
             step2Prepare.to_address_string = ToAddress;
             step2Prepare.unlock_time = "0";
             step2Prepare.using_outs = step1Response.using_outs;
-            if (!string.IsNullOrEmpty(data.PaymentIdString) && data.PaymentIdString.Length \>\ 10) step2Prepare.payment_id_string = data.PaymentIdString;
+            if (!string.IsNullOrEmpty(data.PaymentIdString) && data.PaymentIdString.Length > 10) step2Prepare.payment_id_string = data.PaymentIdString;
             if (!string.IsNullOrEmpty(data.fee_mask))
             {
                 step2Prepare.fee_mask = data.fee_mask;
@@ -199,10 +200,10 @@ namespace BitfiWallet
             {
                 step2Prepare.fee_mask = "10000";
             }
-            List\\ step2PrepareMixOutPrep = new List\\();
+            List<mixouts> step2PrepareMixOutPrep = new List<mixouts>();
             foreach (var mixA in mixOuts)
             {
-                List\\ MixedOutList = new List\\();
+                List<outs> MixedOutList = new List<outs>();
                 foreach (var usedOutputs in mixA.Outputs)
                 {
                     outs Mix_Out = new outs();
@@ -229,7 +230,7 @@ namespace BitfiWallet
             XMRTaskImageResponse taskTransferResponse = new XMRTaskImageResponse();
             try
             {
-                List\\ imgList = new List\\();
+                List<string> imgList = new List<string>();
                 foreach (var tx in requestTable)
                 {
                     compute_key_images img = new compute_key_images();
@@ -243,7 +244,7 @@ namespace BitfiWallet
                     byte[] res123 = new byte[rrr];
                     XMRNative.GenerateKeyImageGetData(res123, rrr);
                     var result123 = Encoding.UTF8.GetString(res123);
-                    var resp = JsonConvert.DeserializeObject\\(result123, ser);
+                    var resp = JsonConvert.DeserializeObject<key_images_response>(result123, ser);
                     if (resp != null && !string.IsNullOrEmpty(resp.retVal))
                     {
                         if (string.IsNullOrEmpty(resp.err_msg))
@@ -255,7 +256,8 @@ namespace BitfiWallet
                 taskTransferResponse.SpendKeyImages = imgList.ToArray();
                 taskTransferResponse.WalletAddress = wallet.Address;
                 taskTransferResponse.Error = null;
-                if (imgList.Count() \                {
+                if (imgList.Count() < 1)
+                {
                     taskTransferResponse.Error = "Invalid info or request for key images.";
                 }
                 return taskTransferResponse;

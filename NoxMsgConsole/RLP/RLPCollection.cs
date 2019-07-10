@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 namespace ECLibrary.RLP
 {
-  public class RLPCollection : List\\, IRLPElement
-  {
-    public byte[] RLPData { get; set; }
-  }
+    public class RLPCollection : List<IRLPElement>, IRLPElement
+    {
+        public byte[] RLPData { get; set; }
+    }
 }
-

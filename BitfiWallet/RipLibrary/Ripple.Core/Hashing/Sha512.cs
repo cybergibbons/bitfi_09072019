@@ -39,9 +39,9 @@ namespace Ripple.Core.Hashing
         {
             Add(new[]
             {
-                (byte) (i \>\\>\ 24),
-                (byte) (i \>\\>\ 16),
-                (byte) (i \>\\>\ 8),
+                (byte) (i >> 24),
+                (byte) (i >> 16),
+                (byte) (i >> 8),
                 (byte) i
             });
             return this;

@@ -44,7 +44,7 @@ namespace Apollo
             if (hex.Length % 2 != 0)
                 throw new Exception("Hex is in invalid format");
             var res = "";
-            for (int i = hex.Length - 2; i \>\= 0; i -= 2)
+            for (int i = hex.Length - 2; i >= 0; i -= 2)
             {
                 res += hex.Substring(i, 2);
             }
@@ -59,7 +59,8 @@ namespace Apollo
         {
             int NumberChars = hex.Length;
             byte[] bytes = new byte[NumberChars / 2];
-            for (int i = 0; i \                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            for (int i = 0; i < NumberChars; i += 2)
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
             return bytes;
         }
         public static string ByteArrayToHex(this byte[] ba)
@@ -81,18 +82,25 @@ namespace Apollo
             int len = byteArray.Length;
             var wordsLen = ((len / 4) | 0) + (len % 4 == 0 ? 0 : 1);
             var words = new UInt32[wordsLen];
-            while (i \            {
+            while (i < (len - (len % 4)))
+            {
                 words[offset++] =
-                  ((UInt32)byteArray[i++] \                  ((UInt32)byteArray[i++] \                  ((UInt32)byteArray[i++] \                  ((UInt32)byteArray[i++]);
+                  ((UInt32)byteArray[i++] << 24) |
+                  ((UInt32)byteArray[i++] << 16) |
+                  ((UInt32)byteArray[i++] << 8) |
+                  ((UInt32)byteArray[i++]);
             }
             if (len % 4 != 0)
             {
-                word = (UInt32)byteArray[i++] \                if (len % 4 \>\ 1)
+                word = (UInt32)byteArray[i++] << 24;
+                if (len % 4 > 1)
                 {
-                    word = word | (UInt32)byteArray[i++] \                }
-                if (len % 4 \>\ 2)
+                    word = word | (UInt32)byteArray[i++] << 16;
+                }
+                if (len % 4 > 2)
                 {
-                    word = word | (UInt32)byteArray[i++] \                }
+                    word = word | (UInt32)byteArray[i++] << 8;
+                }
                 words[offset] = word;
             }
             var wordArray = new WordArray();
@@ -111,28 +119,29 @@ namespace Apollo
             int offset = 0;
             UInt32 word = 0;
             int i = 0;
-            for (i = 0; i \            {
+            for (i = 0; i < len - 1; i++)
+            {
                 word = wordArray.Words[i];
-                byteArray[offset++] = (byte)(isFirstByteHasSign ? word \>\\>\ 24 : (word \>\\>\ 24) & 0xff);
-                byteArray[offset++] = (byte)((word \>\\>\ 16) & 0xff);
-                byteArray[offset++] = (byte)((word \>\\>\ 8) & 0xff);
+                byteArray[offset++] = (byte)(isFirstByteHasSign ? word >> 24 : (word >> 24) &0xff);
+                byteArray[offset++] = (byte)((word >> 16) &0xff);
+                byteArray[offset++] = (byte)((word >> 8) &0xff);
                 byteArray[offset++] = (byte)(word & 0xff);
             }
             word = wordArray.Words[len - 1];
-            byteArray[offset++] = (byte)(isFirstByteHasSign ? word \>\\>\ 24 : (word \>\\>\ 24) & 0xff);
+            byteArray[offset++] = (byte)(isFirstByteHasSign ? word >> 24 : (word >> 24) &0xff);
             if (wordArray.SigBytes % 4 == 0)
             {
-                byteArray[offset++] = (byte)((word \>\\>\ 16) & 0xff);
-                byteArray[offset++] = (byte)((word \>\\>\ 8) & 0xff);
+                byteArray[offset++] = (byte)((word >> 16) &0xff);
+                byteArray[offset++] = (byte)((word >> 8) &0xff);
                 byteArray[offset++] = (byte)(word & 0xff);
             }
-            if (wordArray.SigBytes % 4 \>\ 1)
+            if (wordArray.SigBytes % 4 > 1)
             {
-                byteArray[offset++] = (byte)((word \>\\>\ 16) & 0xff);
+                byteArray[offset++] = (byte)((word >> 16) &0xff);
             }
-            if (wordArray.SigBytes % 4 \>\ 2)
+            if (wordArray.SigBytes % 4 > 2)
             {
-                byteArray[offset++] = (byte)((word \>\\>\ 8) & 0xff);
+                byteArray[offset++] = (byte)((word >> 8) &0xff);
             }
             return byteArray;
         }

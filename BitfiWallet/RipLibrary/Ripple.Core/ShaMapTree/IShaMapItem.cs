@@ -3,10 +3,10 @@ using Ripple.Core.Hashing;
 
 namespace Ripple.Core.ShaMapTree
 {
-    public interface IShaMapItem\\
+    public interface IShaMapItem<out T>
     {
         void ToBytes(IBytesSink sink);
-        IShaMapItem\\ Copy();
+        IShaMapItem<T> Copy();
         T Value();
         HashPrefix Prefix();
     }

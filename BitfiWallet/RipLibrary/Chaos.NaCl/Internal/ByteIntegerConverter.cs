@@ -14,45 +14,65 @@ namespace Chaos.NaCl.Internal
         {
             return
                 (UInt32)(buf[offset + 0])
-            | (((UInt32)(buf[offset + 1])) \\\>\ 8));
-            buf[offset + 2] = unchecked((byte)(value \>\\>\ 16));
-            buf[offset + 3] = unchecked((byte)(value \>\\>\ 24));
+            | (((UInt32)(buf[offset + 1])) << 8)
+            | (((UInt32)(buf[offset + 2])) << 16)
+            | (((UInt32)(buf[offset + 3])) << 24);
+        }
+
+        public static void StoreLittleEndian32(byte[] buf, int offset, UInt32 value)
+        {
+            buf[offset + 0] = unchecked((byte)value);
+            buf[offset + 1] = unchecked((byte)(value >> 8));
+            buf[offset + 2] = unchecked((byte)(value >> 16));
+            buf[offset + 3] = unchecked((byte)(value >> 24));
         }
 
         public static UInt64 LoadBigEndian64(byte[] buf, int offset)
         {
             return
                 (UInt64)(buf[offset + 7])
-                | (((UInt64)(buf[offset + 6])) \\\>\ 8));
-            buf[offset + 5] = unchecked((byte)(value \>\\>\ 16));
-            buf[offset + 4] = unchecked((byte)(value \>\\>\ 24));
-            buf[offset + 3] = unchecked((byte)(value \>\\>\ 32));
-            buf[offset + 2] = unchecked((byte)(value \>\\>\ 40));
-            buf[offset + 1] = unchecked((byte)(value \>\\>\ 48));
-            buf[offset + 0] = unchecked((byte)(value \>\\>\ 56));
+                | (((UInt64)(buf[offset + 6])) << 8)
+                | (((UInt64)(buf[offset + 5])) << 16)
+                | (((UInt64)(buf[offset + 4])) << 24)
+                | (((UInt64)(buf[offset + 3])) << 32)
+                | (((UInt64)(buf[offset + 2])) << 40)
+                | (((UInt64)(buf[offset + 1])) << 48)
+                | (((UInt64)(buf[offset + 0])) << 56);
+        }
+
+        public static void StoreBigEndian64(byte[] buf, int offset, UInt64 value)
+        {
+            buf[offset + 7] = unchecked((byte)value);
+            buf[offset + 6] = unchecked((byte)(value >> 8));
+            buf[offset + 5] = unchecked((byte)(value >> 16));
+            buf[offset + 4] = unchecked((byte)(value >> 24));
+            buf[offset + 3] = unchecked((byte)(value >> 32));
+            buf[offset + 2] = unchecked((byte)(value >> 40));
+            buf[offset + 1] = unchecked((byte)(value >> 48));
+            buf[offset + 0] = unchecked((byte)(value >> 56));
         }
 
         /*public static void XorLittleEndian32(byte[] buf, int offset, UInt32 value)
         {
             buf[offset + 0] ^= (byte)value;
-            buf[offset + 1] ^= (byte)(value \>\\>\ 8);
-            buf[offset + 2] ^= (byte)(value \>\\>\ 16);
-            buf[offset + 3] ^= (byte)(value \>\\>\ 24);
+            buf[offset + 1] ^= (byte)(value >> 8);
+            buf[offset + 2] ^= (byte)(value >> 16);
+            buf[offset + 3] ^= (byte)(value >> 24);
         }*/
 
         /*public static void XorLittleEndian32(byte[] output, int outputOffset, byte[] input, int inputOffset, UInt32 value)
         {
             output[outputOffset + 0] = (byte)(input[inputOffset + 0] ^ value);
-            output[outputOffset + 1] = (byte)(input[inputOffset + 1] ^ (value \>\\>\ 8));
-            output[outputOffset + 2] = (byte)(input[inputOffset + 2] ^ (value \>\\>\ 16));
-            output[outputOffset + 3] = (byte)(input[inputOffset + 3] ^ (value \>\\>\ 24));
+            output[outputOffset + 1] = (byte)(input[inputOffset + 1] ^ (value >> 8));
+            output[outputOffset + 2] = (byte)(input[inputOffset + 2] ^ (value >> 16));
+            output[outputOffset + 3] = (byte)(input[inputOffset + 3] ^ (value >> 24));
         }*/
 
         #endregion
 
         #region Array8
 
-        public static void Array8LoadLittleEndian32(out Array8\\ output, byte[] input, int inputOffset)
+        public static void Array8LoadLittleEndian32(out Array8<UInt32> output, byte[] input, int inputOffset)
         {
             output.x0 = LoadLittleEndian32(input, inputOffset + 0);
             output.x1 = LoadLittleEndian32(input, inputOffset + 4);
@@ -64,10 +84,41 @@ namespace Chaos.NaCl.Internal
             output.x7 = LoadLittleEndian32(input, inputOffset + 28);
         }
 
-        /*        public static void Array8LoadLittleEndian32(out Array8\\ output, byte[] input, int inputOffset, int inputLength)
+        /*        public static void Array8LoadLittleEndian32(out Array8<uint> output, byte[] input, int inputOffset, int inputLength)
                 {
         #if DEBUG
-                    if (inputLength \\\>\ 2)
+                    if (inputLength <= 0)
+                        throw new ArgumentException();
+        #endif
+                    int inputEnd = inputOffset + inputLength;
+                    UInt32 highestInt;
+                    switch (inputLength & 3)
+                    {
+                        case 1:
+                            highestInt = input[inputEnd - 1];
+                            break;
+                        case 2:
+                            highestInt = (uint)(
+                                (input[inputEnd - 1] << 8) |
+                                (input[inputEnd - 2]));
+                            break;
+                        case 3:
+                            highestInt = (uint)(
+                                (input[inputEnd - 1] << 16) |
+                                (input[inputEnd - 2] << 8) |
+                                (input[inputEnd - 3]));
+                            break;
+                        case 0:
+                            highestInt = (uint)(
+                                (input[inputEnd - 1] << 24) |
+                                (input[inputEnd - 2] << 16) |
+                                (input[inputEnd - 3] << 8) |
+                                (input[inputEnd - 4]));
+                            break;
+                        default:
+                            throw new InvalidOperationException();
+                    }
+                    switch ((inputLength - 1) >> 2)
                     {
                         case 7:
                             output.x7 = highestInt;
@@ -154,14 +205,14 @@ namespace Chaos.NaCl.Internal
                     }
                 }*/
 
-        /*public static void Array8XorLittleEndian(byte[] output, int outputOffset, byte[] input, int inputOffset, ref Array8\\ keyStream, int length)
+        /*public static void Array8XorLittleEndian(byte[] output, int outputOffset, byte[] input, int inputOffset, ref Array8<uint> keyStream, int length)
         {
 #if DEBUG
-            InternalAssert(length \>\ 0);
+            InternalAssert(length > 0);
 #endif
             int outputEnd = outputOffset + length;
             UInt32 highestInt;
-            switch ((length - 1) \>\\>\ 2)
+            switch ((length - 1) >> 2)
             {
                 case 7:
                     highestInt = keyStream.x7;
@@ -224,18 +275,18 @@ namespace Chaos.NaCl.Internal
                     output[outputEnd - 1] ^= (byte)highestInt;
                     break;
                 case 2:
-                    output[outputEnd - 1] ^= (byte)(highestInt \>\\>\ 8);
+                    output[outputEnd - 1] ^= (byte)(highestInt >> 8);
                     output[outputEnd - 2] ^= (byte)highestInt;
                     break;
                 case 3:
-                    output[outputEnd - 1] ^= (byte)(highestInt \>\\>\ 16);
-                    output[outputEnd - 2] ^= (byte)(highestInt \>\\>\ 8);
+                    output[outputEnd - 1] ^= (byte)(highestInt >> 16);
+                    output[outputEnd - 2] ^= (byte)(highestInt >> 8);
                     output[outputEnd - 3] ^= (byte)highestInt;
                     break;
                 case 0:
-                    output[outputEnd - 1] ^= (byte)(highestInt \>\\>\ 24);
-                    output[outputEnd - 2] ^= (byte)(highestInt \>\\>\ 16);
-                    output[outputEnd - 3] ^= (byte)(highestInt \>\\>\ 8);
+                    output[outputEnd - 1] ^= (byte)(highestInt >> 24);
+                    output[outputEnd - 2] ^= (byte)(highestInt >> 16);
+                    output[outputEnd - 3] ^= (byte)(highestInt >> 8);
                     output[outputEnd - 4] ^= (byte)highestInt;
                     break;
                 default:
@@ -243,7 +294,7 @@ namespace Chaos.NaCl.Internal
             }
         }*/
 
-        /*public static void Array8StoreLittleEndian32(byte[] output, int outputOffset, ref Array8\\ input)
+        /*public static void Array8StoreLittleEndian32(byte[] output, int outputOffset, ref Array8<uint> input)
         {
             StoreLittleEndian32(output, outputOffset + 0, input.x0);
             StoreLittleEndian32(output, outputOffset + 4, input.x1);
@@ -256,7 +307,7 @@ namespace Chaos.NaCl.Internal
         }*/
         #endregion
 
-        public static void Array16LoadBigEndian64(out Array16\\ output, byte[] input, int inputOffset)
+        public static void Array16LoadBigEndian64(out Array16<UInt64> output, byte[] input, int inputOffset)
         {
             output.x0 = LoadBigEndian64(input, inputOffset + 0);
             output.x1 = LoadBigEndian64(input, inputOffset + 8);
@@ -277,7 +328,7 @@ namespace Chaos.NaCl.Internal
         }
 
         // ToDo: Only used in tests. Remove?
-        public static void Array16LoadLittleEndian32(out Array16\\ output, byte[] input, int inputOffset)
+        public static void Array16LoadLittleEndian32(out Array16<UInt32> output, byte[] input, int inputOffset)
         {
             output.x0 = LoadLittleEndian32(input, inputOffset + 0);
             output.x1 = LoadLittleEndian32(input, inputOffset + 4);
@@ -297,10 +348,10 @@ namespace Chaos.NaCl.Internal
             output.x15 = LoadLittleEndian32(input, inputOffset + 60);
         }
 
-        /*public static void Array16LoadLittleEndian32(out Array16\\ output, byte[] input, int inputOffset, int inputLength)
+        /*public static void Array16LoadLittleEndian32(out Array16<UInt32> output, byte[] input, int inputOffset, int inputLength)
         {
-            Array8\\ temp;
-            if (inputLength \>\ 32)
+            Array8<UInt32> temp;
+            if (inputLength > 32)
             {
                 output.x0 = LoadLittleEndian32(input, inputOffset + 0);
                 output.x1 = LoadLittleEndian32(input, inputOffset + 4);
@@ -342,7 +393,7 @@ namespace Chaos.NaCl.Internal
             }
         }*/
 
-        public static void Array16StoreLittleEndian32(byte[] output, int outputOffset, ref Array16\\ input)
+        public static void Array16StoreLittleEndian32(byte[] output, int outputOffset, ref Array16<UInt32> input)
         {
             StoreLittleEndian32(output, outputOffset + 0, input.x0);
             StoreLittleEndian32(output, outputOffset + 4, input.x1);

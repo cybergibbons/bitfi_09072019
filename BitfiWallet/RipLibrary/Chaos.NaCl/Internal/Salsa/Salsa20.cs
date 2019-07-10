@@ -12,7 +12,7 @@ namespace Chaos.NaCl.Internal.Salsa
 
         public static void HSalsa20(byte[] output, int outputOffset, byte[] key, int keyOffset, byte[] nonce, int nonceOffset)
         {
-            Array16\\ state;
+            Array16<UInt32> state;
             state.x0 = SalsaConst0;
             state.x1 = ByteIntegerConverter.LoadLittleEndian32(key, keyOffset + 0);
             state.x2 = ByteIntegerConverter.LoadLittleEndian32(key, keyOffset + 4);

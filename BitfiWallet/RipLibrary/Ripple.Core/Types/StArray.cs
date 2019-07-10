@@ -6,9 +6,9 @@ using Ripple.Core.Enums;
 
 namespace Ripple.Core.Types
 {
-    public class StArray : List\\, ISerializedType
+    public class StArray : List<StObject>, ISerializedType
     {
-        public StArray(IEnumerable\\ collection) : base(collection)
+        public StArray(IEnumerable<StObject> collection) : base(collection)
         {
         }
 

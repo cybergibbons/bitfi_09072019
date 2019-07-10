@@ -12,12 +12,12 @@ namespace Ripple.Signing.K256
 
     public class EcdsaSignature
     {
-        /// \\
-        /// The two components of the signature. \\
+        /// <summary>
+        /// The two components of the signature. </summary>
         public BigInteger R, S;
 
-        /// \\
-        /// Constructs a signature with the given components. \\
+        /// <summary>
+        /// Constructs a signature with the given components. </summary>
         public EcdsaSignature(BigInteger r, BigInteger s)
         {
             this.R = r;
@@ -35,9 +35,15 @@ namespace Ripple.Signing.K256
             // To protect against signature morphing attacks
 
             // Signature should be:
-            // \\ \\ [ \\ \\ \\ ] [ \\ \\ \\ ]
+            // <30> <len> [ <02> <lenR> <R> ] [ <02> <lenS> <S> ]
             // where
-            // 6 \\ 72))
+            // 6 <= len <= 70
+            // 1 <= lenR <= 33
+            // 1 <= lenS <= 33
+
+            int sigLen = sig.Length;
+
+            if ((sigLen < 8) || (sigLen > 72))
             {
                 return false;
             }
@@ -50,14 +56,14 @@ namespace Ripple.Signing.K256
             // Find R and check its length
             int rPos = 4, rLen = sig[rPos - 1];
 
-            if ((rLen \\ 33) || ((rLen + 7) \>\ sigLen))
+            if ((rLen < 1) || (rLen > 33) || ((rLen + 7) > sigLen))
             {
                 return false;
             }
 
             // Find S and check its length
             int sPos = rLen + 6, sLen = sig[sPos - 1];
-            if ((sLen \\ 33) || ((rLen + sLen + 6) != sigLen))
+            if ((sLen < 1) || (sLen > 33) || ((rLen + sLen + 6) != sigLen))
             {
                 return false;
             }
@@ -123,11 +129,11 @@ namespace Ripple.Signing.K256
 
         }
 
-        /// \\
+        /// <summary>
         /// DER is an international standard for serializing data structures which is widely used in cryptography.
         /// It'S somewhat like protocol buffers but less convenient. This method returns a standard DER encoding
         /// of the signature, as recognized by OpenSSL and other libraries.
-        /// \\
+        /// </summary>
         public  byte[] EncodeToDer()
         {
             return DerByteStream().ToArray();

@@ -45,7 +45,7 @@ namespace Ripple.Core.ShaMapTree
         protected internal ShaMapInner MakeInnerChild()
         {
             var childDepth = Depth + 1;
-            if (childDepth \>\= 64)
+            if (childDepth >= 64)
             {
                 throw new InvalidOperationException();
             }
@@ -70,7 +70,7 @@ namespace Ripple.Core.ShaMapTree
 
         public void WalkLeaves(OnLeaf leafWalker)
         {
-            foreach (var branch in Branches.Where(branch =\>\ branch != null))
+            foreach (var branch in Branches.Where(branch => branch != null))
             {
                 if (branch.IsInner)
                 {
@@ -86,7 +86,7 @@ namespace Ripple.Core.ShaMapTree
         public virtual void WalkTree(ITreeWalker treeWalker)
         {
             treeWalker.OnInner(this);
-            foreach (var branch in Branches.Where(branch =\>\ branch != null))
+            foreach (var branch in Branches.Where(branch => branch != null))
             {
                 if (branch.IsLeaf)
                 {
@@ -99,13 +99,13 @@ namespace Ripple.Core.ShaMapTree
             }
         }
 
-        /// \\ the `only child` leaf or null if other children \\
+        /// <returns> the `only child` leaf or null if other children </returns>
         public ShaMapLeaf OnlyChildLeaf()
         {
             ShaMapLeaf leaf = null;
             var leaves = 0;
 
-            foreach (var branch in Branches.Where(branch =\>\ branch != null))
+            foreach (var branch in Branches.Where(branch => branch != null))
             {
                 if (branch.IsInner)
                 {
@@ -135,17 +135,17 @@ namespace Ripple.Core.ShaMapTree
             return true;
         }
 
-        public IShaMapItem\\ GetItem(Hash256 index)
+        public IShaMapItem<object> GetItem(Hash256 index)
         {
             return GetLeaf(index)?.Item;
         }
 
-        public bool AddItem(Hash256 index, IShaMapItem\\ item)
+        public bool AddItem(Hash256 index, IShaMapItem<object> item)
         {
             return AddLeaf(new ShaMapLeaf(index, item));
         }
 
-        public bool UpdateItem(Hash256 index, IShaMapItem\\ item)
+        public bool UpdateItem(Hash256 index, IShaMapItem<object> item)
         {
             return UpdateLeaf(new ShaMapLeaf(index, item));
         }
@@ -188,10 +188,10 @@ namespace Ripple.Core.ShaMapTree
             return new PathToIndex(this, index);
         }
 
-        /// \\
+        /// <summary>
         /// This should only be called on the deepest inners, as it
-        /// does not do any dirtying. \\
-        /// \\ to add to inner \\
+        /// does not do any dirtying. </summary>
+        /// <param name="leaf"> to add to inner </param>
         internal void AddLeafToTerminalInner(ShaMapLeaf leaf)
         {
             var branch = GetBranch(leaf.Index);
@@ -252,8 +252,23 @@ namespace Ripple.Core.ShaMapTree
 
         private void SetBranch(int slot, ShaMapNode node)
         {
-            SlotBits = SlotBits | (1 \\ true;
-        public override bool IsLeaf =\>\ false;
+            SlotBits = SlotBits | (1 << slot);
+            Branches[slot] = node;
+            Invalidate();
+        }
+
+        private void RemoveBranch(int slot)
+        {
+            Branches[slot] = null;
+            SlotBits = SlotBits & ~(1 << slot);
+        }
+        public bool Empty()
+        {
+            return SlotBits == 0;
+        }
+
+        public override bool IsInner => true;
+        public override bool IsLeaf => false;
 
         internal override HashPrefix Prefix()
         {
@@ -302,7 +317,7 @@ namespace Ripple.Core.ShaMapTree
 
         public int BranchCount()
         {
-            return Branches.Count(branch =\>\ branch != null);
+            return Branches.Count(branch => branch != null);
         }
     }
 }
