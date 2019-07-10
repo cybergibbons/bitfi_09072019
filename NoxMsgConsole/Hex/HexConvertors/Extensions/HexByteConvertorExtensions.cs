@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace EthereumLibrary.Hex.HexConvertors.Extensions
+namespace ECLibrary.Hex.HexConvertors.Extensions
 {
     public static class HexByteConvertorExtensions
     {

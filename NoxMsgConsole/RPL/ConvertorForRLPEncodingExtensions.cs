@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-namespace EthereumLibrary.RPL
+namespace ECLibrary.RPL
 {
     public static class ConvertorForRLPEncodingExtensions
     {
@@ -63,7 +63,7 @@ namespace EthereumLibrary.RPL
             var trimmed = new List<byte>();
             var previousByteWasZero = true;
             for (var i = 0; i < bytes.Length; i++)
-            {
+      {
                 if (previousByteWasZero && bytes[i] == 0)
                     continue;
                 previousByteWasZero = false;

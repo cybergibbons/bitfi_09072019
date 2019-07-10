@@ -1,11 +1,11 @@
-﻿using EthereumLibrary.Hex.HexConvertors.Extensions;
+﻿using ECLibrary.Hex.HexConvertors.Extensions;
 using Org.BouncyCastle.Crypto.Digests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace EthereumLibrary.Util
+namespace ECLibrary.Util
 {
     public class Sha3Keccack
     {

@@ -1,11 +1,11 @@
-﻿using EthereumLibrary.Hex.HexConvertors.Extensions;
+﻿using ECLibrary.Hex.HexConvertors.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace EthereumLibrary.Util
+namespace ECLibrary.Util
 {
     public class AddressUtil
     {
@@ -15,10 +15,10 @@ namespace EthereumLibrary.Util
             var addressHash = new Sha3Keccack().CalculateHash(address);
             var checksumAddress = "0x";
             for (var i = 0; i < address.Length; i++)
-                if (int.Parse(addressHash[i].ToString(), NumberStyles.HexNumber) > 7)
-                    checksumAddress += address[i].ToString().ToUpper();
-                else
-                    checksumAddress += address[i];
+        if (int.Parse(addressHash[i].ToString(), NumberStyles.HexNumber) > 7)
+          checksumAddress += address[i].ToString().ToUpper();
+        else
+          checksumAddress += address[i];
             return checksumAddress;
         }
         public string ConvertToValid20ByteAddress(string address)
@@ -36,12 +36,12 @@ namespace EthereumLibrary.Util
             address = address.RemoveHexPrefix();
             var addressHash = new Sha3Keccack().CalculateHash(address.ToLower());
             for (var i = 0; i < 40; i++)
-            {
+      {
                 var value = int.Parse(addressHash[i].ToString(), NumberStyles.HexNumber);
                 // the nth letter should be uppercase if the nth digit of casemap is 1
                 if (value > 7 && address[i].ToString().ToUpper() != address[i].ToString() ||
                     value <= 7 && address[i].ToString().ToLower() != address[i].ToString())
-                    return false;
+          return false;
             }
             return true;
         }

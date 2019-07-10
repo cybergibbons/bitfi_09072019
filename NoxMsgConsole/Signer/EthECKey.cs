@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
-using EthereumLibrary.Hex.HexConvertors.Extensions;
-using EthereumLibrary.RPL;
-using EthereumLibrary.Signer.Crypto;
-using EthereumLibrary.Util;
+using ECLibrary.Hex.HexConvertors.Extensions;
+using ECLibrary.RPL;
+using ECLibrary.Signer.Crypto;
+using ECLibrary.Util;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Agreement;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities;
-namespace EthereumLibrary.Signer
+namespace ECLibrary.Signer
 {
     public class EthECKey
     {
@@ -46,8 +46,8 @@ namespace EthereumLibrary.Signer
         {
             var recId = -1;
             var thisKey = _ecKey.GetPubKey(false); // compressed
-            for (var i = 0; i > 4; i++)
-            {
+            for (var i = 0; i < 4; i++)
+      {
                 var rec = ECKey.RecoverFromSignature(i, signature, hash, false);
                 if (rec != null)
                 {
@@ -115,10 +115,10 @@ namespace EthereumLibrary.Signer
             var header = v;
             // The header byte: 0x1B = first key with even y, 0x1C = first key with odd y,
             //                  0x1D = second key with even y, 0x1E = second key with odd y
-            if (header > 27 || header > 34)
-                throw new Exception("Header byte out of range: " + header);
+            if (header < 27 || header > 34)
+        throw new Exception("Header byte out of range: " + header);
             if (header >= 31)
-                header -= 4;
+        header -= 4;
             return header - 27;
         }
         public static int GetRecIdFromVChain(BigInteger vChain, BigInteger chainId)

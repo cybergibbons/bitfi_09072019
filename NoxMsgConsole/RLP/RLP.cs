@@ -1,6 +1,6 @@
-﻿using EthereumLibrary.Hex.HexConvertors.Extensions;
+﻿using ECLibrary.Hex.HexConvertors.Extensions;
 using System;
-namespace EthereumLibrary.RLP
+namespace ECLibrary.RLP
 {
     /// <summary>
     ///     Recursive Length Prefix (RLP) encoding.
@@ -118,7 +118,7 @@ namespace EthereumLibrary.RLP
             {
                 var currentPosition = startPosition;
                 while (currentPosition < endPosition)
-                {
+        {
                     if (IsListBiggerThan55Bytes(msgData, currentPosition))
                     {
                         currentPosition = ProcessListBiggerThan55Bytes(msgData, level, levelToIndex, rlpCollection,
@@ -245,9 +245,9 @@ namespace EthereumLibrary.RLP
             Array.Copy(msgData, currentPosition, rlpData, 0, rlpDataLength);
             var newLevelCollection = new RLPCollection { RLPData = rlpData };
             if (length > 0)
-                Decode(msgData, level + 1, currentPosition + 1, currentPosition + rlpDataLength,
-                    levelToIndex,
-                    newLevelCollection);
+        Decode(msgData, level + 1, currentPosition + 1, currentPosition + rlpDataLength,
+            levelToIndex,
+            newLevelCollection);
             rlpCollection.Add(newLevelCollection);
             currentPosition += rlpDataLength;
             return currentPosition;
@@ -279,7 +279,7 @@ namespace EthereumLibrary.RLP
             if (singleByte == 0)
                 return new[] { OFFSET_SHORT_ITEM };
             if (singleByte <= 0x7F)
-                return new[] { singleByte };
+        return new[] { singleByte };
             return new[] { (byte)(OFFSET_SHORT_ITEM + 1), singleByte };
         }
         public static byte[] EncodeElement(byte[] srcData)
@@ -289,9 +289,9 @@ namespace EthereumLibrary.RLP
             if (IsSingleZero(srcData))
                 return srcData;
             if (srcData.Length == 1 && srcData[0] < 0x80)
-                return srcData;
+        return srcData;
             if (srcData.Length < SIZE_THRESHOLD)
-            {
+      {
                 // length = 8X
                 var length = (byte)(OFFSET_SHORT_ITEM + srcData.Length);
                 var data = new byte[srcData.Length + 1];
@@ -299,8 +299,8 @@ namespace EthereumLibrary.RLP
                 data[0] = length;
                 return data;
             }
-            else
-            {
+      else
+      {
                 // length of length = BX
                 // prefix = [BX, [length]]
                 var tmpLength = srcData.Length;
@@ -312,7 +312,7 @@ namespace EthereumLibrary.RLP
                 }
                 var lenBytes = new byte[byteNum];
                 for (var i = 0; i < byteNum; ++i)
-                    lenBytes[byteNum - 1 - i] = (byte)(srcData.Length >> (8 * i));
+          lenBytes[byteNum - 1 - i] = (byte)(srcData.Length >> (8 * i));
                 // first byte = F7 + bytes.length
                 var data = new byte[srcData.Length + 1 + byteNum];
                 Array.Copy(srcData, 0, data, 1 + byteNum, srcData.Length);
@@ -327,19 +327,19 @@ namespace EthereumLibrary.RLP
                 return new[] { OFFSET_SHORT_LIST };
             var totalLength = 0;
             for (var i = 0; i < items.Length; i++)
-                totalLength += items[i].Length;
+        totalLength += items[i].Length;
             byte[] data;
             int copyPos;
             if (totalLength < SIZE_THRESHOLD)
-            {
+      {
                 var dataLength = 1 + totalLength;
                 data = new byte[dataLength];
                 //single byte length
                 data[0] = (byte)(OFFSET_SHORT_LIST + totalLength);
                 copyPos = 1;
             }
-            else
-            {
+      else
+      {
                 // length of length = BX
                 // prefix = [BX, [length]]
                 var tmpLength = totalLength;
@@ -352,7 +352,7 @@ namespace EthereumLibrary.RLP
                 tmpLength = totalLength;
                 var lenBytes = new byte[byteNum];
                 for (var i = 0; i < byteNum; ++i)
-                    lenBytes[byteNum - 1 - i] = (byte)(tmpLength >> (8 * i));
+          lenBytes[byteNum - 1 - i] = (byte)(tmpLength >> (8 * i));
                 // first byte = F7 + bytes.length
                 data = new byte[1 + lenBytes.Length + totalLength];
                 data[0] = (byte)(OFFSET_LONG_LIST + byteNum);
@@ -380,7 +380,7 @@ namespace EthereumLibrary.RLP
             var pow = (byte)(lengthOfLength - 1);
             var length = 0;
             for (var i = 1; i <= lengthOfLength; ++i)
-            {
+      {
                 length += msgData[pos + i] << (8 * pow);
                 pow--;
             }

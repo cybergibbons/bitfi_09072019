@@ -1,10 +1,9 @@
 ﻿using System;
-using EthereumLibrary.RPL;
-using EthereumLibrary.Signer.Crypto;
-using EthereumLibrary.Util;
+using ECLibrary.RPL;
+using ECLibrary.Signer.Crypto;
+using ECLibrary.Util;
 using Org.BouncyCastle.Math;
-using EthereumLibrary.Hex.HexConvertors.Extensions;
-namespace EthereumLibrary.Signer
+namespace ECLibrary.Signer
 {
     public class EthECDSASignature
     {
@@ -31,22 +30,16 @@ namespace EthereumLibrary.Signer
         }
         internal ECDSASignature ECDSASignature { get; }
         public byte[] R => ECDSASignature.R.ToByteArrayUnsigned();
-        public byte[] S => ECDSASignature.S.ToByteArrayUnsigned();
-        public byte[] V
+    public byte[] S => ECDSASignature.S.ToByteArrayUnsigned();
+    public byte[] V
         {
             get => ECDSASignature.V;
             set => ECDSASignature.V = value;
-        }
-        public bool IsLowS => ECDSASignature.IsLowS;
-        public static EthECDSASignature FromDER(byte[] sig)
+            }
+    public bool IsLowS => ECDSASignature.IsLowS;
+    public static EthECDSASignature FromDER(byte[] sig)
         {
             return new EthECDSASignature(sig);
-        }
-        public static string CreateStringSignature(EthECDSASignature signature)
-        {
-            return "0x" + signature.R.ToHex().PadLeft(64, '0') +
-                   signature.S.ToHex().PadLeft(64, '0') +
-                   signature.V.ToHex();
         }
         public byte[] ToDER()
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace EthereumLibrary.Util
+namespace ECLibrary.Util
 {
     public static class ByteUtil
     {
@@ -23,7 +23,7 @@ namespace EthereumLibrary.Util
             int start, int end = int.MaxValue)
         {
             if (end < 0)
-                end = org.Length + end;
+        end = org.Length + end;
             start = Math.Max(0, start);
             end = Math.Max(start, end);
             return org.Skip(start).Take(end - start).ToArray();
@@ -32,7 +32,7 @@ namespace EthereumLibrary.Util
         {
             var returnArray = new byte[length];
             for (var i = 0; i < length; i++)
-                returnArray[i] = 0x00;
+        returnArray[i] = 0x00;
             return returnArray;
         }
         public static IEnumerable<byte> MergeToEnum(params byte[][] arrays)
@@ -52,7 +52,7 @@ namespace EthereumLibrary.Util
             var length = Math.Min(a.Length, b.Length);
             var result = new byte[length];
             for (var i = 0; i < length; i++)
-                result[i] = (byte)(a[i] ^ b[i]);
+        result[i] = (byte)(a[i] ^ b[i]);
             return result;
         }
     }
